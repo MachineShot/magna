@@ -2,6 +2,8 @@
 
 ## Project setup
 ```
+router example: https://www.vuemastery.com/blog/vue-router-a-tutorial-for-vue-3/
+
 install node https://nodejs.org/en/download/
 
 npm install -g @vue/cli

@@ -1,6 +1,51 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <nav>
+      <ul>
+        <li><router-link to="/">Pagrindinis langas</router-link></li>
+      </ul>
+      <ul>
+        <li>Naudotojo Dalies Valdymas:</li>
+        <li><router-link to="/prisijungimas">Prisijungimas</router-link></li>
+        <li><router-link to="/registracija">Registracija</router-link></li>
+        <li><router-link to="/paskyrosInformacijosPerziura">Paskyros Informacijos Peržiura</router-link></li>
+      </ul>
+
+      <ul>
+        <li>Naudotojo Reklamų Valdymas:</li>
+        <li><router-link to="/reklamos">Reklamos</router-link></li>
+        <li><router-link to="/reklamosPirkimas">Reklamos Pirkimas</router-link></li>
+        <li><router-link to="/uzsakytosReklamosRedagavimas">Užsakytų Reklamų Redagavimas</router-link></li>
+        <li><router-link to="/reklamuAtaskaitosKurimas">Reklamų Ataskaitos Kūrimas</router-link></li>
+      </ul>
+
+      <ul>
+        <li>Pinigų Valdymas:</li>
+        <li><router-link to="/mokejimas">Mokėjimai</router-link></li>
+        <li><router-link to="/mokejimuSarasas">Mokejimų Sąrašas</router-link></li>
+        <li><router-link to="/mokejimoDuomenuPerziura">Mokejimo Duomenų Peržiūra</router-link></li>
+        <li><router-link to="/saskaitosAtaskaitosKurimas">Sąskaitų Ataskaitos Kurimas</router-link></li>
+      </ul>
+
+      <ul>
+        <li>Tiekėjo Reklamų Valdymas:</li>
+        <li><router-link to="/uzsakytosReklamos">Užsakytos Reklamos</router-link></li>
+        <li><router-link to="/siulomosReklamos">Siūlomos Reklamos</router-link></li>
+        <li><router-link to="/siulomosReklamosKurimas">Siūlomos Reklamos Kūrimas</router-link></li>
+        <li><router-link to="/atliktuReklamuAtaskaitosKurimas">Atliktų Reklamų Ataskaitos Kūrimas</router-link></li>
+      </ul>
+
+      <ul>
+        <li>Reklamos Agentūrų Valdymas:</li>
+        <li><router-link to="/agenturosDarbuotojuSarasas">Agentūros Darbuotojų Sąrašas</router-link></li>
+        <li><router-link to="/agenturosDarbuotojoKurimas">Agentūros Darbuotojo Kūrimas</router-link></li>
+        <li><router-link to="/agenturosAtaskaitosKurimas">Agentūros Veiklos Ataskaitos Kūrimas</router-link></li>
+      </ul>
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -22,5 +67,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+ul {
+  list-style-type: none;
 }
 </style>

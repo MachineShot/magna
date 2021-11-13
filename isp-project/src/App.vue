@@ -1,6 +1,5 @@
 <template>
   <div>
-    <img alt="Vue logo" height="64" width="64" src="./assets/logo.png">
     <HelloWorld msg="vuejs component example"/>
 
     <hr>
@@ -47,7 +46,7 @@
       </ul>
     </nav>
     <hr>
-    
+
     <router-view />
 
   </div>
@@ -74,12 +73,41 @@
     margin-top: 60px;
   }
 
+  a {
+    color: #2364a5;
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: #2364a5;
+  }
+
+  a:hover {
+    color: black;
+  }
+
   ul {
     list-style-type: none;
+  }
+</style>
+
+<style scoped>
+  ul:first-of-type {
+    margin-top: 60px;
+  }
+
+  ul li {
+    border-bottom: 1px solid rgb(80, 80, 80);
+    padding: 5px 0;
   }
 
   ul li:first-of-type {
     font-weight: bold;
+  }
+
+  ul li:only-child {
+    border: none;
+    font-weight: normal;
   }
 
   .main-nav {

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <h1>Magna Advertisements</h1>
+    </div>
     <hr>
     <nav class="main-nav">
       <ul>

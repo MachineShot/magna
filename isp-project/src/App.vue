@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h1>Magna byb Advertisements</h1>
+      <h1>Magna Advertisements</h1>
     </div>
     <hr>
     <nav class="main-nav">

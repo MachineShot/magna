@@ -1,5 +1,6 @@
 #@(#) script.ddl
 
+DROP TABLE IF EXISTS Saskaita;
 DROP TABLE IF EXISTS Komentaras;
 DROP TABLE IF EXISTS Uzsakymas;
 DROP TABLE IF EXISTS Internetine_reklama;
@@ -9,7 +10,6 @@ DROP TABLE IF EXISTS Idarbina;
 DROP TABLE IF EXISTS Tiekejas;
 DROP TABLE IF EXISTS Mokejimo_duomenys;
 DROP TABLE IF EXISTS Agentura;
-DROP TABLE IF EXISTS Saskaita;
 DROP TABLE IF EXISTS Naudotojas;
 DROP TABLE IF EXISTS El_laisko_sablonas;
 CREATE TABLE El_laisko_sablonas
@@ -31,14 +31,6 @@ CREATE TABLE Naudotojas
 	gimimo_data date NOT NULL,
 	tipas ENUM('tiekejas', 'uzsakovas', 'vadovas') NOT NULL,
 	PRIMARY KEY(slapyvardis)
-);
-
-CREATE TABLE Saskaita
-(
-	nr int NOT NULL,
-	apmokejimo_data datetime NOT NULL,
-	suma decimal NOT NULL,
-	PRIMARY KEY(nr)
 );
 
 CREATE TABLE Agentura
@@ -96,7 +88,7 @@ CREATE TABLE Idarbina
 CREATE TABLE Reklama
 (
 	id int NOT NULL AUTO_INCREMENT,
-	kaina decimal NOT NULL,
+	kaina decimal(18, 2) NOT NULL,
 	pavadinimas varchar (255) NOT NULL,
 	sudarymo_data datetime NOT NULL,
 	galiojimo_laikotarpis datetime NOT NULL,
@@ -131,18 +123,15 @@ CREATE TABLE Internetine_reklama
 CREATE TABLE Uzsakymas
 (
 	nr int NOT NULL,
-	kaina decimal NOT NULL,
+	kaina decimal(18, 2) NOT NULL,
 	sudarymo_data datetime NOT NULL,
 	pabaigos_data datetime NOT NULL,
 	busena ENUM('ruosiama', 'vykdoma', 'neaktyvi') NOT NULL,
 	fk_uzsakovo_slapyvardis varchar (255) NOT NULL,
 	fk_reklama_id int NOT NULL,
-	fk_saskaitos_nr int NOT NULL,
 	PRIMARY KEY(nr),
-	UNIQUE(fk_saskaitos_nr),
 	CONSTRAINT uzsako FOREIGN KEY(fk_uzsakovo_slapyvardis) REFERENCES Naudotojas (slapyvardis),
-	CONSTRAINT priklauso FOREIGN KEY(fk_reklama_id) REFERENCES Reklama (id),
-	CONSTRAINT ieina FOREIGN KEY(fk_saskaitos_nr) REFERENCES Saskaita (nr)
+	CONSTRAINT priklauso FOREIGN KEY(fk_reklama_id) REFERENCES Reklama (id)
 );
 
 CREATE TABLE Komentaras
@@ -154,4 +143,14 @@ CREATE TABLE Komentaras
 	fk_uzsakymo_nr int NOT NULL,
 	PRIMARY KEY(id),
 	CONSTRAINT parasomas FOREIGN KEY(fk_uzsakymo_nr) REFERENCES Uzsakymas (nr)
+);
+
+CREATE TABLE Saskaita
+(
+	nr int NOT NULL,
+	apmokejimo_data datetime NOT NULL,
+	suma decimal(18, 2) NOT NULL,
+	fk_uzsakymo_nr int NOT NULL,
+	PRIMARY KEY(nr),
+	CONSTRAINT ieina FOREIGN KEY(fk_uzsakymo_nr) REFERENCES Uzsakymas (nr)
 );

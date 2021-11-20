@@ -1,3 +1,11 @@
+## Projekto paleidimas
+1. Įsirašyti xampp: https://www.apachefriends.org/download.html
+2. Projekto failų direktorija turi būti xampp/htdocs/isp/ tokiu formatu, kad pvz. index.php failas būtų xampp/htdocs/isp/index.php vietoje.
+3. Paleisti xampp/xampp-control.exe failą.
+4. Atsidariusiame xampp lange įjungti (Start) Apache ir MySQL modulius.
+5. Jei žingsniai buvo atlikti teisingai, projekto pagrindinis puslapis turėtų būti pasiekiamas adresu http://localhost/isp/
+
+## Aprašas
 Projektuojama sistema “Reklamos agentūros ir paslaugos”  yra skirta skirtingų reklamos agentūrų teikiamų paslaugų teikimui/užsakymui. Sistemos naudotojai yra skirstomi į tris kategorijas:
 Vartotojas;
 Tiekėjas (agentūros darbuotojas);

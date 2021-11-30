@@ -34,6 +34,8 @@
             $stazas = 0;
         }
     ?>
+    <link rel='stylesheet' href='../../styles/forms.css'>
+    </head>
     <body>
         <div id="app">
             <?php include '../../phpUtils/renderNavigation.php'; ?>
@@ -58,7 +60,7 @@
             <div class="form-wrapper">
                 <form method="post" id="new_employee_form">
                     <div>
-                        <label for="slapyvardis">Pasirinkite tiekėją, kurį įdarbinsite:</label><br>
+                        <label for="slapyvardis">Pasirinkite tiekėją, kurį norite įdarbinti:</label><br>
                         <select id="slapyvardis" name="slapyvardis" form="new_employee_form">
                             <option disabled selected value="">Slapyvardis - Vardas Pavardė</option>
                             <?php
@@ -89,12 +91,7 @@
         </div>
 
         <script>
-            const app = new Vue({
-                el: '#app',
-                data: {
-                    message: '1. If you see this then Vue works.'
-                }
-            });
+            const app = new Vue({el: '#app'});
         </script>
     </body>
 </html>

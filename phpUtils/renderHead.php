@@ -7,5 +7,8 @@
             <title>Magna Adversitements</title>
             <script src='https://unpkg.com/vue/dist/vue.js'></script>
             <link rel='stylesheet' href='/isp/styles/global.css'>
-        </head>";
+            <link rel='stylesheet' href='/isp/styles/navigation.css'>
+    ";
+    # there is no closing head tag here in case there's a
+    # need for additional imports in different pages
 ?>

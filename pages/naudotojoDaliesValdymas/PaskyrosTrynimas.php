@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <?php include '../../phpUtils/renderHead.php'; ?>
+    </head>
     <body>
         <div id="app">
             <?php include '../../phpUtils/renderNavigation.php'; ?>

@@ -8,6 +8,7 @@
         global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
         $sql = "SELECT
+                `id`,
                 `isidarbinimo_data`,
                 `adresas`,
                 `darbo_stazas`,
@@ -52,8 +53,16 @@
     }
         
     # "Šalinti darbuotoją"
-    function db_remove_agency_employee() {
+    function db_remove_agency_employee($id) {
+        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
+        $sql = "DELETE FROM `idarbina`
+                WHERE `fk_tiekejas_id` = '$id' AND `fk_agentura_id` = '$agenturos_id'";
+        db_send_query($sql);
+
+        $sql = "DELETE FROM `tiekejas`
+                WHERE `id` = '$id'";
+        db_send_query($sql);
     }
         
     # "Redaguoti darbuotojo informaciją"

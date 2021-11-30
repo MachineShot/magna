@@ -29,7 +29,7 @@
             }
             
             db_add_agency_employee($adresas, $stazas, $slapyvardis);
-            $success = "Įmonėje sėkmingai įdarbintas naujas darbuotojas.";
+            $success = "Agentūroje sėkmingai įdarbintas naujas darbuotojas.";
             $adresas = "";
             $stazas = 0;
         }

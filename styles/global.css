@@ -12,6 +12,7 @@
     margin-top: 60px;
 }
 
+/* Anchor tag */
 a {
 	color: #2364a5;
 	text-decoration: none;
@@ -23,4 +24,24 @@ a:visited {
 
 a:hover {
 	color: black;
+}
+
+/* Table */
+table {
+	border-collapse: collapse;
+}
+
+table tr th,
+table tr td {
+	border: 1px solid grey;
+	padding: 3px 3px 3px 6px;
+}
+
+table tr:nth-child(odd) {
+	background-color: rgb(240, 240, 240);
+}
+
+/* General */
+.invisible {
+	display: none;
 }

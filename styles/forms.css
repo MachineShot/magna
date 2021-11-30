@@ -1,3 +1,4 @@
+/* Form */
 .form-wrapper {
 	text-align: center;
 }
@@ -5,7 +6,8 @@
 form div input,
 form div textarea,
 form div select,
-.form-submit-button {
+.form-submit-button,
+.filtering-input {
 	font-size: 18px;
 	margin: 4px 0 12px;
 	padding: 4px 8px;
@@ -35,4 +37,14 @@ form div select,
 }
 .status-msg-success {
 	color: rgb(105, 189, 22);
+}
+
+/* Filtering form */
+.filtering-wrapper {
+	text-align: center;
+	padding: 16px;
+}
+
+.filtering-wrapper input {
+	margin-top: 12px;
 }

@@ -10,10 +10,8 @@
             <?php echo "2. If you see this then PHP works." ?>
 
             <h1>Paskyros informacijos perziuros langas.</h1>
-            <ul>
-              <li><a href="./paskyrosInformacijosKeitimas.php">Paskyros Informacijos Keitimas</a></li>
-              <li><a href="./paskyrosSlaptazodzioKeitimas.php">Paskyros Slaptažodzio Keitimas</a></li>
-            </ul>
+            <a href="./paskyrosInformacijosKeitimas.php">Paskyros Informacijos Keitimas</a><br>
+            <a href="./paskyrosSlaptazodzioKeitimas.php">Paskyros Slaptažodzio Keitimas</a>
         </div>
 
         <script>

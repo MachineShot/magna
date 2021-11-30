@@ -34,7 +34,7 @@
             $stazas = 0;
         }
     ?>
-    <link rel='stylesheet' href='../../styles/forms.css'>
+        <link rel='stylesheet' href='../../styles/forms.css'>
     </head>
     <body>
         <div id="app">

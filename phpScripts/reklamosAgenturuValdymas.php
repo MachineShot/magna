@@ -5,7 +5,22 @@
 
     # "Peržiūrėti darbuotojus"
     function db_get_agency_employees() {
-        
+        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+
+        $sql = "SELECT
+                `isidarbinimo_data`,
+                `adresas`,
+                `darbo_stazas`,
+                `fk_naudotojo_slapyvardis`,
+                `vardas`,
+                `pavarde`
+            FROM `idarbina`
+            INNER JOIN `tiekejas`
+                ON `tiekejas`.`id` = `fk_tiekejas_id`
+            INNER JOIN `naudotojas`
+                ON `fk_naudotojo_slapyvardis` = `slapyvardis`
+            WHERE `fk_agentura_id` = '$agenturos_id'";
+        return db_send_query($sql);
     }
 
     # "Kurti darbuotoją"
@@ -77,7 +92,7 @@
                     `slapyvardis`,
                     `vardas`,
                     `pavarde`
-				FROM naudotojas
+				FROM `naudotojas`
 				WHERE `tipas` = 'tiekejas'";
         $result = db_send_query($sql);
 

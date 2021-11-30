@@ -10,8 +10,13 @@
         if ($_POST != null) {
             $id = $_POST['id'];
             
-            db_remove_agency_employee($id);
-            $success = "Iš agentūros sėkmingai pašalintas darbuotojas.";
+            $did_remove = db_remove_agency_employee($id);
+            if ($did_remove) {
+                $success = "Iš agentūros sėkmingai pašalintas darbuotojas.";
+            }
+            else {
+                $error = "Darbuotojas turi užregistruotų reklamų jūsų agentūroje, todėl nebuvo pašalintas.";
+            }
         }
     ?>
         <link rel='stylesheet' href='../../styles/forms.css'>

@@ -51,18 +51,40 @@
                     ('$agenturos_id', '$id')";
         db_send_query($sql);
     }
+
+    # check whether an employee has at least 1 ad available
+    function db_does_employee_have_ads($id) {
+        $sql = "SELECT
+                    `id`
+                FROM `reklama`
+                WHERE `fk_tiekejo_id` = '$id'";
+        $result = db_send_query($sql);
+        
+        if ($result->num_rows == 0) {
+            return false;
+        }
+
+        return true;
+    }
         
     # "Šalinti darbuotoją"
     function db_remove_agency_employee($id) {
         global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        
+        # check whether an employee can be removed from the agency
+        $does_have_ads = db_does_employee_have_ads($id);
 
-        $sql = "DELETE FROM `idarbina`
-                WHERE `fk_tiekejas_id` = '$id' AND `fk_agentura_id` = '$agenturos_id'";
-        db_send_query($sql);
+        if (!$does_have_ads) {
+            $sql = "DELETE FROM `idarbina`
+                    WHERE `fk_tiekejas_id` = '$id' AND `fk_agentura_id` = '$agenturos_id'";
+            db_send_query($sql);
 
-        $sql = "DELETE FROM `tiekejas`
-                WHERE `id` = '$id'";
-        db_send_query($sql);
+            $sql = "DELETE FROM `tiekejas`
+                    WHERE `id` = '$id'";
+            db_send_query($sql);
+            return true;
+        }
+        return false;
     }
         
     # "Redaguoti darbuotojo informaciją"

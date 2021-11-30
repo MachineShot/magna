@@ -1,0 +1,38 @@
+.form-wrapper {
+	text-align: center;
+}
+
+form div input,
+form div textarea,
+form div select,
+.form-submit-button {
+	font-size: 18px;
+	margin: 4px 0 12px;
+	padding: 4px 8px;
+}
+
+.form-submit-button {
+	margin: 10px;
+	background-color: white;
+	box-shadow: none;
+	border: 1px solid #2c3e50;
+}
+
+.form-submit-button:hover {
+	background-color: rgb(240, 240, 240);
+	cursor: pointer;
+}
+
+/* Error and success messages */
+.status-msg-error,
+.status-msg-success {
+	font-weight: bold;
+	text-align: center;
+}
+
+.status-msg-error {
+	color: rgb(199, 28, 28);
+}
+.status-msg-success {
+	color: rgb(105, 189, 22);
+}

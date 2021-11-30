@@ -1,0 +1,25 @@
+.main-nav {
+	display: flex;
+}
+
+.main-nav ul {
+	list-style-type: none;
+}
+
+.main-nav ul:first-of-type {
+	margin-top: 60px;
+}
+
+.main-nav ul li {
+	border-bottom: 1px solid rgb(80, 80, 80);
+	padding: 5px 0;
+}
+
+.main-nav ul li:first-of-type {
+	font-weight: bold;
+}
+
+.main-nav ul li:only-child {
+	border: none;
+	font-weight: normal;
+}

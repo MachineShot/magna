@@ -26,7 +26,6 @@
                 FROM `tiekejas`
                 WHERE `fk_naudotojo_slapyvardis` = '$slapyvardis'";
         $id = mysqli_fetch_assoc(db_send_query($sql))['id'];
-        #$id = $result['id'];
 
         # add a new entry into the table 'idarbina'
         # that shows in which agency this employee works

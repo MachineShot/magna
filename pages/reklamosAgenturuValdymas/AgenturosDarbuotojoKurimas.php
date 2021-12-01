@@ -80,7 +80,7 @@
                     </div>	
                     <div>
                         <label for="stazas">Tiekėjo darbo stažas:</label><br>
-                        <input name='stazas' id="stazas" type='number' min="0" value="<?php echo $stazas; ?>" required>
+                        <input name='stazas' id="stazas" type='number' min="0" step="0.1" value="<?php echo $stazas; ?>" required>
                     </div>	
                     <div>
                         <input type="submit" name="new_employee_form" value="Įdarbinti tiekėją" class="form-submit-button">

@@ -35,7 +35,7 @@
                     echo "<p class='status-msg-success'>".$success."</p>";
                 }
 
-                $result = db_get_agency_employees();
+                $result = db_get_all_agency_employees();
                 if ($result->num_rows == 0) {
                     echo "<h4>Jūsų agentūroje nėra nei vieno darbuotojo.</h4>";
                     die();
@@ -54,7 +54,7 @@
 
             <h4 id='no-data-id' class='invisible'>Filtrus atitinkančių darbuotojų nėra.</h4>
 
-            <table style="margin: 0px auto" id='data-table'>
+            <table id='data-table'>
                 <tr>
                     <th>Vardas, Pavardė</th>
                     <th>Slapyvardis</th>
@@ -77,13 +77,18 @@
                                         <form method='post' id='remove_employee_form".$id."'>
                                             <input name='id' type='hidden' value='$id'>
                                             <button type='button' class='td-remove-entry__button' onclick='toggleFormSubmit($id);'>
-                                                Šalinti darbuotoją
+                                                Šalinti
                                             </button>
                                         </form>
                                     </td>
+                                    <td class='td-remove-entry'>
+                                        <button type='button' class='td-remove-entry__button' onclick='redirect($id);'>
+                                            Redaguoti
+                                        </button>
+                                    </td>
                                 </tr>
                                 <div class='form-submit-wrapper wrapper-id-".$id."'>
-                                    <div class='form-submit-wrapper__content wrapper-content-id-".$id."'>
+                                    <div class='form-submit-wrapper__content'>
                                         <h3>Ar tikrai norite iš agentūros pašalinti darbuotoją?</h3>
                                         <input class='form-submit-button form-submit-button--green' type='submit' form='remove_employee_form".$id."' value='Patvirtinti' onclick='toggleFormSubmit($id);'>
                                         <input class='form-submit-button form-submit-button--red' type='button' value='Atšaukti' onclick='toggleFormSubmit($id)'>
@@ -98,10 +103,14 @@
         <script>
             const app = new Vue({el: '#app'});
 
+            const redirect = (id) => {
+                window.location.href = `/isp/pages/reklamosAgenturuValdymas/agenturosDarbuotojuValdymas.php?id=${id}`;
+            };
+
             const toggleFormSubmit = (id) => {
                 const wrapper = document.getElementsByClassName(`wrapper-id-${id}`)[0];
                 wrapper.classList.toggle("form-visible");
-            }
+            };
 
             const showNoDataMessage = () => {
                 const el = document.getElementById("no-data-id");

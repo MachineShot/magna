@@ -18,7 +18,7 @@
 	echo 
 	"  <div>
 			<div>
-				<h1>Magna Advertisements</h1>
+				<h2>Magna Advertisements</h2>
 			</div>
 			<hr>
 			<nav class='main-nav'>

@@ -29,6 +29,7 @@ a:hover {
 /* Table */
 table {
 	border-collapse: collapse;
+	margin: 0px auto 32px;
 }
 
 table tr th,

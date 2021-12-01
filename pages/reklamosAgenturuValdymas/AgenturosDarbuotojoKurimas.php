@@ -17,15 +17,15 @@
 
 
             if ($slapyvardis == "") {
-                $error .= "Privalote pasirinkti sistemoje užregistruotą tiekėją.<br>";
+                $error .= "*Privalote pasirinkti sistemoje užregistruotą tiekėją.<br>";
             }
 
             if ($stazas == "") {
-                $error .= "Privalote nurodyti dabartinį tiekėjo darbo stažą.<br>";
+                $error .= "*Privalote nurodyti dabartinį tiekėjo darbo stažą.<br>";
             }
 
             if ($adresas == "") {
-                $error .= "Privalote nurodyti darbuotojo adresą.<br>";
+                $error .= "*Privalote nurodyti darbuotojo adresą.<br>";
             }
             
             db_add_agency_employee($adresas, $stazas, $slapyvardis);

@@ -15,7 +15,7 @@
                 $success = "Iš agentūros sėkmingai pašalintas darbuotojas.";
             }
             else {
-                $error = "Darbuotojas turi užregistruotų reklamų jūsų agentūroje, todėl nebuvo pašalintas.";
+                $error = "*Darbuotojas turi užregistruotų reklamų jūsų agentūroje, todėl nebuvo pašalintas.";
             }
         }
     ?>

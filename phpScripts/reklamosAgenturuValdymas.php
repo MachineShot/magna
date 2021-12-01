@@ -121,7 +121,7 @@
     }
         
     # "Sukurti agentūros atliktų reklamų ataskaitą"
-    function db_get_agency_report() {
+    function db_get_agency_report($date_start, $date_end, $stazas_start, $stazas_end) {
 
     }
 

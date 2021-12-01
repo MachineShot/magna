@@ -13,11 +13,11 @@
             $id = $_POST['id'];
 
             if ($stazas == "") {
-                $error .= "Privalote nurodyti dabartinį tiekėjo darbo stažą.<br>";
+                $error .= "*Privalote nurodyti dabartinį tiekėjo darbo stažą.<br>";
             }
 
             if ($adresas == "") {
-                $error .= "Privalote nurodyti darbuotojo adresą.<br>";
+                $error .= "*Privalote nurodyti darbuotojo adresą.<br>";
             }
             
             db_update_agency_employee_info($adresas, $stazas, $id);

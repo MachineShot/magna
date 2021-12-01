@@ -10,10 +10,7 @@
         <div id="app">
             <?php include '../../phpUtils/renderNavigation.php'; ?>
 
-
-            <h1>Agenturos ataskaitos kurimo langas.</h1>
-            <a href="./agenturosVeiklosAtaskaita.php">Agentūros veiklos ataskaitos langas</a>
-
+            <h1>Agentūros ataskaitos kūrimas</h1>
             <p class="status-msg-error"></p>
 
             <div class="form-wrapper">

@@ -45,9 +45,9 @@
             <div class='filtering-wrapper'>
                 <label for='filtering-input-id'>
                     Sąrašo filtravimas pagal darbuotojo
-                    <strong>vardą</strong>
+                    <b>vardą</b>
                     arba
-                    <strong>pavardę</strong>:
+                    <b>pavardę</b>:
                 </label><br>
                 <input id='filtering-input-id' class='filtering-input' onkeyup='filterData();'></input>
             </div>

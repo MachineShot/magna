@@ -9,7 +9,9 @@
 #app {
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    margin: 60px auto 0;
+	max-width: 1336px;
+	padding-bottom: 80px;
 }
 
 /* Anchor tag */
@@ -45,4 +47,8 @@ table tr:nth-child(odd) {
 /* General */
 .invisible {
 	display: none;
+}
+
+h1 {
+	margin-bottom: 32px;
 }

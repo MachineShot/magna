@@ -1,0 +1,28 @@
+.description-container {
+    align-items: stretch;
+    border: 1px solid #2c3e50;
+    border-right: 0;
+    border-left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 120px;
+}
+
+.list {
+    list-style-type: none;
+    margin: 0;
+    padding: 24px 0;
+    width: 100%;
+}
+
+.list:first-of-type {
+    border-right: 1px solid #2c3e50;
+}
+
+.list li {
+    margin-bottom: 6px;
+}
+
+.list li:first-child {
+    margin-bottom: 16px;
+}

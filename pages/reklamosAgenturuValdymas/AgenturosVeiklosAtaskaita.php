@@ -97,9 +97,9 @@
                         </ul>
                     </div>
 
-                    <h4>Ataskaitai pritaikyti filtrai:</h4>
+                    <h4>Ataskaitoje vaizduojami duomenys su žemiau pritaikytais filtrais:</h4>
                     <p>
-                        Užregistruotų reklamų sudarymo data nuo
+                        Užregistruotų reklamų ir užsakymų sudarymo data nuo
                         <b><?php echo $date_start ?></b>
                         iki <b><?php echo $date_end?></b>
                     </p>
@@ -125,8 +125,14 @@
                         ?>
                     </p>
                 </aside>
+                <?php
+                    if (count($report_data) == 0) {
+                        echo "<h3>Filtrus atitinkančių duomenų nėra.</h3>";
+                        die();
+                    }
+                ?>
                 <article>
-                    <table id='data-table'>
+                    <table>
                         <tr>
                             <th>Darbuotojo vardas, pavardė</th>
                             <th>Slapyvardis</th>
@@ -139,14 +145,26 @@
                         </tr>
                         
                         <?php
+                            $full_darbo_stazas = 0;
+                            $sum_ads_active = 0;
+                            $sum_ads_inactive = 0;
+                            $sum_orders_active = 0;
+                            $sum_orders_inactive = 0;
                             foreach($report_data as $row) {
-                                echo "  <tr class='table-filter-row'>
-                                            <td class='table__vardas-pavarde'>".$row['vardas'].' '.$row['pavarde']."</td>
+                                $full_darbo_stazas += $row['darbo_stazas'];
+
+                                echo "  <tr>
+                                            <td>".$row['vardas'].' '.$row['pavarde']."</td>
                                             <td>".$row['fk_naudotojo_slapyvardis']."</td>
                                             <td>".$row['isidarbinimo_data']."</td>
                                             <td>".$row['darbo_stazas']."</td>";
                                 foreach ($row as $person) {
                                     if(gettype($person) == 'object') {
+                                        $sum_ads_active += $person->ads_active;
+                                        $sum_ads_inactive += $person->ads_inactive;
+                                        $sum_orders_active += $person->orders_active;
+                                        $sum_orders_inactive += $person->orders_inactive;
+                                        
                                         echo "
                                             <td>".$person->ads_active."</td>
                                             <td>".$person->ads_inactive."</td>
@@ -157,6 +175,34 @@
                                 echo "  </tr>";
                             }
                         ?>
+                    </table>
+                </article>
+                <article>
+                    <h4>Filtrus atitinkančių duomenų bendros statistikos:</h4>
+                    <table>
+                        <tr>
+                            <th>Darbuotojų sk.</th>
+                            <th>Vidutinis darbo stažas</th>
+                            <th>Aktyvių reklamų sk.</th>
+                            <th>Neatyvių reklamų sk.</th>
+                            <th>Aktyvių užsakymų sk.</th>
+                            <th>Neaktyvių užsakymų sk.</th>
+                        </tr>
+
+                        <?php
+                            $employees_count = count($report_data);
+                            $avg_darbo_stazas = $full_darbo_stazas / $employees_count;
+
+                            echo "  <tr>
+                                        <td>".count($report_data)."</td>
+                                        <td>".round($avg_darbo_stazas, 2)."</td>
+                                        <td>".$sum_ads_active."</td>
+                                        <td>".$sum_ads_inactive."</td>
+                                        <td>".$sum_orders_active."</td>
+                                        <td>".$sum_orders_inactive."</td>
+                                    </tr>";
+                        ?>
+                        
                     </table>
                 </article>
             </section>

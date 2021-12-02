@@ -8,20 +8,24 @@
     </head>
     <body>
         <div id="app">
-            <?php include '../../phpUtils/renderNavigation.php'; ?>
+            <?php
+                include '../../phpUtils/renderNavigation.php';
+                $date_today = date('Y-m-d');
+                $date_tomorrow = date('Y-m-d', strtotime($date_today . " +1 days"));
+            ?>
 
             <h1>Agentūros ataskaitos kūrimas</h1>
             <p class="status-msg-error"></p>
 
             <div class="form-wrapper">
-                <form method="post" id="report_form" onsubmit="return handleSubmit(event);">
+                <form id="report_form" onsubmit="return handleSubmit(event);">
                     <div>
-                        <label for="date_start">Užregistruotų reklamų sudarymo datos pradžia:</label><br>
-                        <input type="date" id="date_start" name="date_start" value="<?php echo date('Y-m-d'); ?>" required>
+                        <label for="date_start">Užregistruotų reklamų ir užsakymų sudarymo datos pradžia (nuo):</label><br>
+                        <input type="date" id="date_start" name="date_start" value="<?php echo $date_today; ?>" required>
                     </div>
                     <div>
-                        <label for="date_end">Užregistruotų reklamų sudarymo datos pabaiga:</label><br>
-                        <input type="date" id="date_end" name="date_end" value="<?php echo date('Y-m-d'); ?>" required>
+                        <label for="date_end">Užregistruotų reklamų ir užsakymų sudarymo datos pabaiga (iki):</label><br>
+                        <input type="date" id="date_end" name="date_end" value="<?php echo $date_tomorrow; ?>" required>
                     </div>
                     <div>
                         <label for="stazas_start">Mažiausias darbuotojo darbo stažas (nebūtina nurodyti):</label><br>
@@ -65,6 +69,11 @@
                     error_msg += "*Pradžios data negali būti didesnė už pabaigos datą.<br>";
                 }
 
+                if (date_start === date_end) {
+                    error_msg += "*Pradžios data negali būti tokia pati kaip pabaigos data.<br><br>";
+                    error_msg += "Jei norite matyti tik nustatytos dienos duomenis, pabaigos datai parinkite sekančią dieną.<br>";
+                }
+
                 // check if stazas is correct (if entered)
                 if (stazas_start >= 0 && stazas_end >= 0 && stazas_start > stazas_end) {
                     error_msg += "*Mažiausias darbo stažas negali būti didesnis už nurodytą didžiausią darbo stažą.<br>";
@@ -75,7 +84,7 @@
                     const error_msg_tag = document.getElementsByClassName("status-msg-error")[0];
                     error_msg_tag.innerHTML = error_msg;
                 } else {
-                    // redirect
+                    // redirect with url parameters
                     const url_params = `date_start=${date_start}&date_end=${date_end}&stazas_start=${stazas_start}&stazas_end=${stazas_end}`;
                     window.location.href = `/isp/pages/reklamosAgenturuValdymas/agenturosVeiklosAtaskaita.php?${url_params}`;
                 }

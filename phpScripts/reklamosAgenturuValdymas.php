@@ -121,8 +121,8 @@
 		db_send_query($sql);
     }
 
-    # get all agency orders and their statuses
-    function db_get_agency_orders() {
+    # get all filtered agency orders and their statuses
+    function db_get_filtered_agency_orders($date_start, $date_end) {
         global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
         $sql = "SELECT
@@ -135,12 +135,15 @@
                     ON `tiekejas`.`id` = `reklama`.`fk_tiekejo_id`
                 LEFT JOIN `uzsakymas`
                     ON `uzsakymas`.`fk_reklama_id` = `reklama`.`id`
-                WHERE `fk_agentura_id` = '$agenturos_id'";
+                WHERE 
+                    `fk_agentura_id` = '$agenturos_id' AND
+                    `uzsakymas`.`sudarymo_data` >= '$date_start' AND
+                    `uzsakymas`.`sudarymo_data` <= '$date_end'";
         return db_send_query($sql);
     }
 
-    # get all ads and their statuses of an agency
-    function db_get_agency_ads() {
+    # get all filtered ads and their statuses of an agency
+    function db_get_filtered_agency_ads($date_start, $date_end) {
         global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
         $sql = "SELECT
@@ -151,7 +154,41 @@
                     ON `tiekejas`.`id` = `fk_tiekejas_id`
                 LEFT JOIN `reklama`
                     ON `tiekejas`.`id` = `reklama`.`fk_tiekejo_id`
-                WHERE `fk_agentura_id` = '$agenturos_id'";
+                WHERE
+                    `fk_agentura_id` = '$agenturos_id' AND
+                    `reklama`.`sudarymo_data` >= '$date_start' AND
+                    `reklama`.`sudarymo_data` <= '$date_end'";
+        return db_send_query($sql);
+    }
+
+    # get all filtered agency employees
+    function db_get_filtered_agency_employees($stazas_start, $stazas_end) {
+        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+
+        # if $stazas_end == -1 then it means it was not set
+        $stazas_filter = '';
+        if ($stazas_end != -1) {
+            $stazas_filter = " AND `darbo_stazas` <= '$stazas_end'";
+        }
+
+        $sql = "SELECT
+                `id`,
+                `isidarbinimo_data`,
+                `adresas`,
+                `darbo_stazas`,
+                `fk_naudotojo_slapyvardis`,
+                `vardas`,
+                `pavarde`
+            FROM `idarbina`
+            INNER JOIN `tiekejas`
+                ON `tiekejas`.`id` = `fk_tiekejas_id`
+            INNER JOIN `naudotojas`
+                ON `fk_naudotojo_slapyvardis` = `slapyvardis`
+            WHERE
+                `fk_agentura_id` = '$agenturos_id' AND
+                `darbo_stazas` >= '$stazas_start'
+                $stazas_filter
+            ORDER BY `darbo_stazas` DESC";
         return db_send_query($sql);
     }
         
@@ -159,9 +196,9 @@
     function db_get_agency_report($date_start, $date_end, $stazas_start, $stazas_end) {
         # Due to my lack of mental capacity I had to use
         # 3 queries instead of 1 and count totals with php.
-        $employees = db_get_all_agency_employees();
-        $ads = db_get_agency_ads();
-        $orders = db_get_agency_orders();
+        $employees = db_get_filtered_agency_employees($stazas_start, $stazas_end);
+        $ads = db_get_filtered_agency_ads($date_start, $date_end);
+        $orders = db_get_filtered_agency_orders($date_start, $date_end);
 
         # create arrays of data so that i can be reused later
         $employees_arr = array();

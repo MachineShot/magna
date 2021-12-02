@@ -4,7 +4,7 @@
     </head>
     <body>
         <div id="app">
-            <?php include '../../phpUtils/renderNavigation.php'; ?>
+        <navigation usertype="<?php echo $usertype;?>"></navigation>
 
             {{ message }}
             <br>
@@ -13,6 +13,7 @@
             <h1>Atliktu reklamu ataskaitos langas.</h1>
         </div>
 
+        <script src="../../components/navigation.js"></script>
         <script>
             const app = new Vue({
                 el: '#app',

@@ -8,8 +8,8 @@
     </head>
     <body>
         <div id="app">
+            <navigation usertype="<?php echo $usertype;?>"></navigation>
             <?php
-                include '../../phpUtils/renderNavigation.php';
                 $date_today = date('Y-m-d');
                 $date_tomorrow = date('Y-m-d', strtotime($date_today . " +1 days"));
             ?>
@@ -42,6 +42,7 @@
             </div>
         </div>
 
+        <script src="../../components/navigation.js"></script>
         <script>
             const app = new Vue({el: '#app'});
 

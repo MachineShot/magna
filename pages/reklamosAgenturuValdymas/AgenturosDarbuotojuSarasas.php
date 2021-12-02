@@ -23,7 +23,7 @@
     </head>
     <body>
         <div id="app">
-            <?php include '../../phpUtils/renderNavigation.php'; ?>
+            <navigation usertype="<?php echo $usertype;?>"></navigation>
 
             <h1>Agentūros darbuotojų sąrašas</h1>
 
@@ -100,6 +100,7 @@
             </table>
         </div>
 
+        <script src="../../components/navigation.js"></script>
         <script>
             const app = new Vue({el: '#app'});
 

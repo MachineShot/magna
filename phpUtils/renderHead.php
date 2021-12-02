@@ -1,4 +1,19 @@
 <?php
+    # login (set session variables)
+    include 'startSession.php';
+    $usertype = isset($_SESSION["usertype"]) ? $_SESSION["usertype"] : "";
+    $usertype = "uzsakovas";
+    #$usertype = "tiekejas";
+    #$usertype = "vadovas";
+
+    if ($usertype == "vadovas") {
+        // nustatyt $_SESSION["agenturos_id"] (kuria agentura valdo prisijunges vadovas)
+    }
+
+    ########### padaryt, kad negaletu i neleidziamas posistemes eit naudotojas,
+    ########### o ne tik, kad navigacija isjungtu tam tikros posistemes,
+    ########### nes per adresa pvz. uzsakovas gali patekt i agenturos puslapius.
+
     echo 
     "  <head>
             <meta charset='UTF-8'>

@@ -4,7 +4,7 @@
     </head>
     <body>
         <div id="app">
-            <?php include '../../phpUtils/renderNavigation.php'; ?>
+            <navigation usertype="<?php echo $usertype;?>"></navigation>
 
             {{ message }}
             <br>
@@ -15,6 +15,7 @@
             <a href="./paskyrosSlaptazodzioKeitimas.php">Paskyros Slaptažodzio Keitimas</a>
         </div>
 
+        <script src="../../components/navigation.js"></script>
         <script>
             const app = new Vue({
                 el: '#app',

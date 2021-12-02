@@ -3,13 +3,14 @@
 2. Projekto failų direktorija turi būti xampp/htdocs/isp/ tokiu formatu, kad pvz. index.php failas būtų xampp/htdocs/isp/index.php vietoje.
 3. Paleisti xampp/xampp-control.exe failą.
 4. Atsidariusiame xampp lange įjungti (Start) Apache ir MySQL modulius.
-5. Jei žingsniai buvo atlikti teisingai, projekto pagrindinis puslapis turėtų būti pasiekiamas adresu http://localhost/isp/
+5. Į DB valdymo sistemą (http://localhost/phpmyadmin) importuoti duomenų bazę su duomenimis iš SQL_DATABASE_DUMP.sql failo (arba be duomenų iš SQL_DDL_CODE.dll)
+6. Jei žingsniai buvo atlikti teisingai, projekto pagrindinis puslapis turėtų būti pasiekiamas adresu http://localhost/isp/
 
 ## Aprašas
 Projektuojama sistema “Reklamos agentūros ir paslaugos”  yra skirta skirtingų reklamos agentūrų teikiamų paslaugų teikimui/užsakymui. Sistemos naudotojai yra skirstomi į tris kategorijas:
-Vartotojas;
+Naudotojas;
 Tiekėjas (agentūros darbuotojas);
-Agentūros vadovas ( vartotojas, užregistravęs agentūrą);
+Agentūros vadovas (naudotojas, užregistravęs agentūrą);
 
 Sistemos prisijungimo/registracijos skiltyje naudotojai turi galimybę pasirinkti naudotojo registracijos/prisijungimo tipą, pagal kurį bus prieinamos skirtingos sistemos posistemės:
 Naudotojai, kurie yra vartotojo tipo turės prieigą prie naudotojų dalies valdymo, naudotojų reklamos valdymo bei pinigų valdymo posistemių;

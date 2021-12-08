@@ -10,7 +10,7 @@
         <div id="app">
             <navigation usertype="<?php echo $usertype;?>"></navigation>
 
-                        <h1>Reklamų sąrašas</h1>
+                        <h1>Užsakytų reklamų sąrašas</h1>
 
                         <?php
                             if ($error != "") {
@@ -20,9 +20,9 @@
                                 echo "<p class='status-msg-success'>".$success."</p>";
                             }
 
-                            $result = db_get_all_ads();
+                            $result = db_get_ordered_ads();
                             if ($result->num_rows == 0) {
-                                echo "<h4>Nėra nei vienos reklamos.</h4>";
+                                echo "<h4>Neturite nei vienos reklamos.</h4>";
                                 die();
                             }
                         ?>
@@ -44,15 +44,8 @@
                                 <th>Pavadinimas</th>
                                 <th>Kaina</th>
                                 <th>Sudarymo data</th>
-                                <th>Pasiūlymo galiojimo laikotarpis</th>
-                                <th>Fizine</th>
-                                <th>Miestas</th>
-                                <th>Adresas</th>
-                                <th>Koordinatės</th>
-                                <th>Dydis</th>
-                                <th>Internetine</th>
-                                <th>Puslapio adresas</th>
-                                <th>Dydis</th>
+                                <th>Pabaigos data</th>
+                                <th>Būsena</th>
                             </tr>
 
                             <?php
@@ -63,42 +56,29 @@
                                                 <td>".$row['pavadinimas']."</td>
                                                 <td>".$row['kaina']."</td>
                                                 <td>".$row['sudarymo_data']."</td>
-                                                <td>".$row['galiojimo_laikotarpis']."</td>";
-                                                if($row['miestas'] == null){
-                                                    echo "  <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                    ";
-                                                }
-                                                else{
-                                                    echo "  <td>&#9989;</td>
-                                                            <td>".$row['miestas']."</td>
-                                                            <td>".$row['adresas']."</td>
-                                                            <td>".$row['koordinates']."</td>
-                                                            <td>".$row['dydis']."</td>
-                                                    ";
-                                                }
-                                                if($row['puslapio_adresas'] == null){
-                                                    echo "  <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                            <td>&#10060;</td>
-                                                    ";
-                                                }
-                                                else{
-                                                    echo "  <td>&#9989;</td>
-                                                            <td>".$row['puslapio_adresas']."</td>
-                                                            <td>".$row['tipas']."</td>
-                                                    ";
-                                                }
-                                                echo "
+                                                <td>".$row['pabaigos_data']."</td>
+                                                <td>".$row['busena']."</td>
+                                                <td class='td-remove-entry'>
+                                                    <form method='post' id='remove_ordered_ad_form".$id."'>
+                                                        <input name='id' type='hidden' value='$id'>
+                                                        <button type='button' class='td-remove-entry__button' onclick='toggleFormSubmit($id);'>
+                                                            Atšaukti
+                                                        </button>
+                                                    </form>
+                                                </td>
                                                 <td class='td-remove-entry'>
                                                     <button type='button' class='td-remove-entry__button' onclick='redirect($id);'>
-                                                        Pirkti
+                                                        Redaguoti
                                                     </button>
                                                 </td>
                                             </tr>
+                                            <div class='form-submit-wrapper wrapper-id-".$id."'>
+                                                <div class='form-submit-wrapper__content'>
+                                                    <h3>Ar tikrai norite pašalinti užsakymą?</h3>
+                                                    <input class='form-submit-button form-submit-button--green' type='submit' form='remove_ordered_ad_form".$id."' value='Patvirtinti' onclick='toggleFormSubmit($id);'>
+                                                    <input class='form-submit-button form-submit-button--red' type='button' value='Atšaukti' onclick='toggleFormSubmit($id)'>
+                                                </div>
+                                            </div>
                                         ";
                                 }
                             ?>
@@ -110,7 +90,12 @@
                         const app = new Vue({el: '#app'});
 
                         const redirect = (id) => {
-                            window.location.href = `/isp/pages/naudotojoReklamosValdymas/UzsakytosReklamosPirkimas.php?id=${id}`;
+                            window.location.href = `/isp/pages/naudotojoReklamosValdymas/UzsakytosReklamosRedagavimas.php?id=${id}`;
+                        };
+
+                        const toggleFormSubmit = (id) => {
+                            const wrapper = document.getElementsByClassName(`wrapper-id-${id}`)[0];
+                            wrapper.classList.toggle("form-visible");
                         };
 
                         const showNoDataMessage = () => {

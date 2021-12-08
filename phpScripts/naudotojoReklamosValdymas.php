@@ -5,7 +5,15 @@
 
     # Peržiūrėti visas reklamas
     function db_get_all_ads() {
-        $sql = "SELECT * FROM `reklama`";
+        $sql = "SELECT `reklama`.*, `fizine_reklama`.`miestas`, `fizine_reklama`.`adresas`,
+        `fizine_reklama`.`koordinates`, `fizine_reklama`.`dydis`,
+        `internetine_reklama`.`puslapio_adresas`, `internetine_reklama`.`tipas`
+                FROM `reklama`
+                LEFT JOIN `fizine_reklama`
+                    ON `reklama`.`id` = `fizine_reklama`.`fk_reklamos_id`
+                LEFT JOIN `internetine_reklama`
+                    ON `reklama`.`id` = `internetine_reklama`.`fk_reklamos_id`
+                WHERE `aktyvi` = 1";
         return db_send_query($sql);
     }
 

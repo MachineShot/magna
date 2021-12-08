@@ -25,8 +25,7 @@ Vue.component("navigation", {
                 <ul v-if="usertype === 'uzsakovas'">
                     <li>Naudotojo Reklamų Valdymas:</li>
                     <li><a href='/isp/pages/naudotojoReklamosValdymas/reklamos.php'>Reklamos</a></li>
-                    <li><a href='/isp/pages/naudotojoReklamosValdymas/reklamosPirkimas.php'>Reklamos Pirkimas</a></li>
-                    <li><a href='/isp/pages/naudotojoReklamosValdymas/uzsakytosReklamosRedagavimas.php'>Užsakytų Reklamų Redagavimas</a></li>
+                    <li><a href='/isp/pages/naudotojoReklamosValdymas/uzsakytosReklamos.php'>Užsakytos reklamos</a></li>
                     <li><a href='/isp/pages/naudotojoReklamosValdymas/reklamuAtaskaitosKurimas.php'>Reklamų Ataskaitos Kūrimas</a></li>
                 </ul>
 

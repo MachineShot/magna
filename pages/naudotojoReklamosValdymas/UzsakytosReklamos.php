@@ -3,6 +3,8 @@
     <?php
     include '../../phpUtils/renderHead.php';
     include '../../phpScripts/naudotojoReklamosValdymas.php';
+    $error = "";
+    $success = "";
     ?>
     <link rel='stylesheet' href='../../styles/forms.css'>
     </head>
@@ -26,16 +28,6 @@
                                 die();
                             }
                         ?>
-
-                        <div class='filtering-wrapper'>
-                            <label for='filtering-input-id'>
-                                Sąrašo filtravimas pagal darbuotojo
-                                <b>vardą</b>
-                                arba
-                                <b>pavardę</b>:
-                            </label><br>
-                            <input id='filtering-input-id' class='filtering-input' onkeyup='filterData();'></input>
-                        </div>
 
                         <h4 id='no-data-id' class='invisible'>Filtrus atitinkančių darbuotojų nėra.</h4>
 
@@ -96,40 +88,6 @@
                         const toggleFormSubmit = (id) => {
                             const wrapper = document.getElementsByClassName(`wrapper-id-${id}`)[0];
                             wrapper.classList.toggle("form-visible");
-                        };
-
-                        const showNoDataMessage = () => {
-                            const el = document.getElementById("no-data-id");
-                            const table = document.getElementById("data-table");
-                            el.classList.remove("invisible");
-                            table.classList.add("invisible");
-                        };
-
-                        const filterData = () => {
-                            const input = document.getElementById("filtering-input-id");
-                            const eilutes = Array.from(document.getElementsByClassName("table-filter-row"));
-                            const vardaiPavardes = Array.from(document.getElementsByClassName("table__vardas-pavarde"));
-
-                            let visible = 0;
-                            if (input !== "") {
-                                eilutes.forEach((eilute, id) => {
-                                    if (vardaiPavardes[id].innerText.toLowerCase().includes(input.value.toLowerCase())) {
-                                        eilute.classList.remove("invisible");
-                                        visible++;
-                                    } else {
-                                        eilute.classList.add("invisible");
-                                    }
-                                });
-                            }
-
-                            if (visible === 0) {
-                                showNoDataMessage();
-                            } else {
-                                const el = document.getElementById("no-data-id");
-                                const table = document.getElementById("data-table");
-                                el.classList.add("invisible");
-                                table.classList.remove("invisible");
-                            }
                         };
                     </script>
                 </body>

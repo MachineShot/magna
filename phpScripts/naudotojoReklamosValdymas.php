@@ -24,16 +24,25 @@
 
     # Gauti vieną užsakytą reklamą
     function db_get_ordered_ad($id) {
-            global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
-            $sql = "SELECT  `uzsakymas`.`nr` as `id`, `uzsakymas`.`kaina`, `uzsakymas`.`sudarymo_data`,
-                            `uzsakymas`.`pabaigos_data`, `uzsakymas`.`busena`,
-                            `reklama`.`pavadinimas`
-                    FROM `uzsakymas`
-                    INNER JOIN `reklama`
-                    	ON `reklama`.`id` = `fk_reklama_id`
-                    WHERE `fk_uzsakovo_slapyvardis` = '$user' AND `uzsakymas`.`nr` = '$id'";
-            return db_send_query($sql);
-        }
+        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        $sql = "SELECT  `uzsakymas`.`nr` as `id`, `uzsakymas`.`kaina`, `uzsakymas`.`sudarymo_data`,
+                        `uzsakymas`.`pabaigos_data`, `uzsakymas`.`busena`,
+                        `reklama`.`pavadinimas`
+                FROM `uzsakymas`
+                INNER JOIN `reklama`
+                    ON `reklama`.`id` = `fk_reklama_id`
+                WHERE `fk_uzsakovo_slapyvardis` = '$user' AND `uzsakymas`.`nr` = '$id'";
+        return mysqli_fetch_assoc(db_send_query($sql));
+    }
+
+    # "Redaguoti užsakymo informaciją"
+    function db_update_ordered_ad_info($end_date, $id) {
+        $sql = "UPDATE `uzsakymas`
+                SET
+                    `pabaigos_data` = '$end_date'
+                WHERE `nr` = '$id'";
+        db_send_query($sql);
+    }
 
     # "Kurti darbuotoją"
     function db_add_agency_employee($adresas, $stazas, $slapyvardis) {
@@ -96,18 +105,6 @@
             return true;
         }
         return false;
-    }
-
-    # "Redaguoti darbuotojo informaciją"
-    function db_update_agency_employee_info($adresas, $stazas, $id) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
-
-		$sql = "UPDATE `tiekejas`
-				SET
-                    `adresas` = '$adresas',
-                    `darbo_stazas` = '$stazas'
-				WHERE `id` = '$id'";
-		db_send_query($sql);
     }
 
     # get all filtered agency orders and their statuses

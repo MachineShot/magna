@@ -8,14 +8,14 @@
             $success = "";
 
             if ($_POST != null) {
-                $data = $_POST['data'];
+                $end_date = $_POST['data'];
                 $id = $_POST['id'];
 
-                if ($data == "") {
+                if ($end_date == "") {
                     $error .= "*Privalote nurodyti pabaigos datą.<br>";
                 }
 
-                db_update_agency_employee_info($data, $id);
+                db_update_ordered_ad_info($end_date, $id);
                 $success = "Sėkmingai atnaujinta užsakymo informacija.";
             }
         ?>
@@ -58,7 +58,7 @@
                     }
 
                     $data = db_get_ordered_ad($id);
-                    $data = $data['pabaigos_data'];
+                    $end_date = $data['pabaigos_data'];
                 ?>
 
                 <table>
@@ -86,7 +86,7 @@
                     <form method="post" id="update_order_form">
                         <div>
                             <label for="data">Užsakymo pabaigos data:</label><br>
-                            <input name='data' id="data" type='datetime-local' value="<?php echo $data; ?>" required>
+                            <input name='data' id="data" type='datetime-local' value="<?php echo $end_date; ?>" required>
                         </div>
                         <input name='id' type='hidden' value="<?php echo $data['id']; ?>">
                         <div>

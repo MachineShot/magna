@@ -59,7 +59,7 @@
                                                 <td>".$row['pabaigos_data']."</td>
                                                 <td>".$row['busena']."</td>
                                                 <td class='td-remove-entry'>
-                                                    <form method='post' id='remove_employee_form".$id."'>
+                                                    <form method='post' id='remove_ordered_ad_form".$id."'>
                                                         <input name='id' type='hidden' value='$id'>
                                                         <button type='button' class='td-remove-entry__button' onclick='toggleFormSubmit($id);'>
                                                             Atšaukti
@@ -74,8 +74,8 @@
                                             </tr>
                                             <div class='form-submit-wrapper wrapper-id-".$id."'>
                                                 <div class='form-submit-wrapper__content'>
-                                                    <h3>Ar tikrai norite iš agentūros pašalinti darbuotoją?</h3>
-                                                    <input class='form-submit-button form-submit-button--green' type='submit' form='remove_employee_form".$id."' value='Patvirtinti' onclick='toggleFormSubmit($id);'>
+                                                    <h3>Ar tikrai norite pašalinti užsakymą?</h3>
+                                                    <input class='form-submit-button form-submit-button--green' type='submit' form='remove_ordered_ad_form".$id."' value='Patvirtinti' onclick='toggleFormSubmit($id);'>
                                                     <input class='form-submit-button form-submit-button--red' type='button' value='Atšaukti' onclick='toggleFormSubmit($id)'>
                                                 </div>
                                             </div>

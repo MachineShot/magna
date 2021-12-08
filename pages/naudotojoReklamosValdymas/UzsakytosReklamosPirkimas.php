@@ -9,16 +9,19 @@
 
             if ($_POST != null) {
 
-                $start_date = $_POST['pradzios_data'];
-                $end_date = $_POST['pabaigos_data'];
+                $start_date = $_POST['start_date'];
+                $end_date = $_POST['end_date'];
                 $id = $_POST['id'];
 
+                if ($start_date == "") {
+                    $error .= "*Privalote nurodyti pradžios datą.<br>";
+                }
                 if ($end_date == "") {
                     $error .= "*Privalote nurodyti pabaigos datą.<br>";
                 }
 
-                db_update_ordered_ad_info($end_date, $id);
-                $success = "Sėkmingai atnaujinta užsakymo informacija.";
+                db_add_order($start_date, $end_date, $id);
+                $success = "Sėkmingai sukurtas užsakymas.";
             }
         ?>
             <link rel='stylesheet' href='../../styles/forms.css'>
@@ -27,7 +30,7 @@
             <div id="app">
                 <navigation usertype="<?php echo $usertype;?>"></navigation>
 
-                <h1>Užsakytos reklamos informacijos redagavimas</h1>
+                <h1>Reklamos užsakymo kūrimas</h1>
 
                 <?php
                     # get passed id from url parameters
@@ -47,7 +50,7 @@
                     }
 
                     if ($is_wrong_url) {
-                        echo "  <h4>URL neteisingai nurodytas užsakytos reklamos indeksas.</h4>
+                        echo "  <h4>URL neteisingai nurodytas reklamos indeksas.</h4>
                                 <h4>Patikrinkite puslapio adresą ir bandykite dar kartą.</h4>";
                         die();
                     }
@@ -59,17 +62,19 @@
                         echo "<p class='status-msg-success'>".$success."</p>";
                     }
 
-                    $data = db_get_ordered_ad($id);
-                    $end_date = $data['pabaigos_data'];
+                    $data = db_get_ad($id);
+                    date_default_timezone_set('Europe/Vilnius');
+                    $start_date = date("Y-m-d\TH:i");
+                    $end_date = $data['galiojimo_laikotarpis'];
                 ?>
 
                 <table>
                     <tr>
                         <th>Pavadinimas</th>
                         <th>Kaina</th>
-                        <th>Sudarymo data</th>
-                        <th>Pabaigos data</th>
-                        <th>Būsena</th>
+                        <th>Pasiūlymo sudarymo data</th>
+                        <th>Pasiūlymo galiojimo laikotarpis</th>
+                        <th>Tiekėjas</th>
                     </tr>
 
                     <?php
@@ -77,8 +82,8 @@
                                     <td>".$data['pavadinimas']."</td>
                                     <td>".$data['kaina']."</td>
                                     <td>".$data['sudarymo_data']."</td>
-                                    <td>".$data['pabaigos_data']."</td>
-                                    <td>".$data['busena']."</td>
+                                    <td>".$data['galiojimo_laikotarpis']."</td>
+                                    <td>".$data['fk_tiekejo_id']."</td>
                                 </tr>
                             ";
                     ?>
@@ -87,19 +92,23 @@
                 <div class="form-wrapper">
                     <form method="post" id="update_order_form">
                         <div>
-                            <label for="data">Užsakymo pabaigos data:</label><br>
-                            <input name='data' id="data" type='datetime-local' value="<?php echo $end_date; ?>" required>
+                            <label for="start_date">Užsakymo pradžios data:</label><br>
+                            <input name='start_date' id="start_date" type='datetime-local' value="<?php echo $start_date; ?>" required>
+                        </div>
+                        <div>
+                            <label for="end_date">Užsakymo pabaigos data:</label><br>
+                            <input name='end_date' id="end_date" type='datetime-local' value="<?php echo $end_date; ?>" required>
                         </div>
                         <input name='id' type='hidden' value="<?php echo $data['id']; ?>">
                         <div>
                             <button type='button' class='form-submit-button' onclick='toggleFormSubmit()'>
-                                Atnaujinti duomenis
+                                Pateikti duomenis
                             </button>
                         </div>
                     </form>
                     <div class='form-submit-wrapper'>
                         <div class='form-submit-wrapper__content'>
-                            <h3>Ar tikrai norite atnaujinti užsakymo duomenis?</h3>
+                            <h3>Ar tikrai norite pateikti užsakymo duomenis?</h3>
                             <input class='form-submit-button form-submit-button--green' type='submit' form='update_order_form' value='Patvirtinti' onclick='toggleFormSubmit();'>
                             <input class='form-submit-button form-submit-button--red' type='button' value='Atšaukti' onclick='toggleFormSubmit();'>
                         </div>

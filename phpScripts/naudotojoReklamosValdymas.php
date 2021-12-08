@@ -17,6 +17,13 @@
         return db_send_query($sql);
     }
 
+    # Peržiūrėti viena reklama
+        function db_get_ad($id) {
+            $sql = "SELECT * FROM `reklama`
+                    WHERE `id` = '$id'";
+            return mysqli_fetch_assoc(db_send_query($sql));
+        }
+
     # Peržiūrėti visas užsakytas reklamas
     function db_get_ordered_ads() {
         global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
@@ -52,31 +59,18 @@
         db_send_query($sql);
     }
 
-    # "Kurti darbuotoją"
-    function db_add_agency_employee($adresas, $stazas, $slapyvardis) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+    # "Kurti užsakymą"
+    function db_add_order($start_date, $end_date, $id) {
+        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
-        # add entry in 'tiekejas' table
-        $date = date('Y-m-d');
-        $sql = "INSERT INTO `tiekejas`
-                    (`isidarbinimo_data`, `adresas`, `darbo_stazas`, `fk_naudotojo_slapyvardis`)
+        # Get info about advert
+        $data = db_get_ad($id);
+        $price = $data['kaina'];
+
+        $sql = "INSERT INTO `uzsakymas`
+                    (`kaina`, `sudarymo_data`, `pabaigos_data`, `fk_uzsakovo_slapyvardis`, `fk_reklama_id`)
                 VALUES
-                    ('$date', '$adresas', '$stazas', '$slapyvardis')";
-        db_send_query($sql);
-
-        # get id of the newly created entry
-        $sql = "SELECT
-                    `id`
-                FROM `tiekejas`
-                WHERE `fk_naudotojo_slapyvardis` = '$slapyvardis'";
-        $id = mysqli_fetch_assoc(db_send_query($sql))['id'];
-
-        # add a new entry into the table 'idarbina'
-        # that shows in which agency this employee works
-        $sql = "INSERT INTO `idarbina`
-                    (`fk_agentura_id`, `fk_tiekejas_id`)
-                VALUES
-                    ('$agenturos_id', '$id')";
+                    ('$price', '$start_date', '$end_date', '$user', '$id')";
         db_send_query($sql);
     }
 

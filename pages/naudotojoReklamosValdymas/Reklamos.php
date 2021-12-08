@@ -45,6 +45,7 @@
                                 <th>Kaina</th>
                                 <th>Sudarymo data</th>
                                 <th>Pasiūlymo galiojimo laikotarpis</th>
+                                <th>Tiekėjas</th>
                                 <th>Fizine</th>
                                 <th>Miestas</th>
                                 <th>Adresas</th>
@@ -63,7 +64,8 @@
                                                 <td>".$row['pavadinimas']."</td>
                                                 <td>".$row['kaina']."</td>
                                                 <td>".$row['sudarymo_data']."</td>
-                                                <td>".$row['galiojimo_laikotarpis']."</td>";
+                                                <td>".$row['galiojimo_laikotarpis']."</td>
+                                                <td>".$row['fk_tiekejo_id']."</td>";
                                                 if($row['miestas'] == null){
                                                     echo "  <td>&#10060;</td>
                                                             <td>&#10060;</td>

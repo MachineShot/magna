@@ -55,10 +55,10 @@
 
                 // optional values
                 if (price_start === "") {
-                    price_start = -1;
+                    price_start = 0;
                 }
                 if (price_end === "") {
-                    price_end = -1;
+                    price_end = 0;
                 }
 
                 // check if dates are correct
@@ -86,8 +86,8 @@
                     error_msg_tag.innerHTML = error_msg;
                 } else {
                     // redirect with url parameters
-                    const url_params = `date_start=${date_start}&date_end=${date_end}&stazas_start=${price_start}&stazas_end=${price_end}`;
-                    window.location.href = `/isp/pages/reklamosAgenturuValdymas/ReklamuAtaskaita.php?${url_params}`;
+                    const url_params = `date_start=${date_start}&date_end=${date_end}&price_start=${price_start}&price_end=${price_end}`;
+                    window.location.href = `/isp/pages/naudotojoReklamosValdymas/reklamuAtaskaita.php?${url_params}`;
                 }
             };
         </script>

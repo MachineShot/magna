@@ -74,14 +74,69 @@
         db_send_query($sql);
     }
 
+    function db_filtering($date_start, $date_end, $price_start, $price_end, $func, $group_by) {
+        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+
+        $whereClauseString = "";
+        if(!empty($date_start)) {
+            $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`)>='$date_start'";
+            if(!empty($date_end)) {
+                $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`) <= '$date_end'";
+            }
+        } else {
+            if(!empty($date_end)) {
+                $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`) <= '$date_end'";
+            }
+        }
+
+        if(!empty($price_start)) {
+            $whereClauseString .= " AND `uzsakymas`.`kaina` >= '$price_start'";
+            if(!empty($price_end)) {
+                $whereClauseString .= " AND `uzsakymas`.`kaina` <= '$price_end'";
+            }
+        } else {
+            if(!empty($price_end)) {
+                $whereClauseString .= " AND `uzsakymas`.`kaina` <= '$price_end'";
+            }
+        }
+
+        #var_dump($whereClauseString);
+
+        $sql = "$func
+                FROM `uzsakymas`
+                INNER JOIN `reklama` ON `reklama`.`id` = `uzsakymas`.`fk_reklama_id`
+                INNER JOIN `tiekejas` ON `tiekejas`.`id` = `reklama`.`fk_tiekejo_id`
+                INNER JOIN `idarbina` ON `idarbina`.`fk_tiekejas_id` = `reklama`.`fk_tiekejo_id`
+                INNER JOIN `agentura` ON `agentura`.`id` = `idarbina`.`fk_agentura_id`
+                WHERE 
+                    `fk_uzsakovo_slapyvardis` = '$user' 
+                    $whereClauseString
+                $group_by
+            ";
+        return db_send_query($sql);
+    }
+
     # Gauti ataskaitos duomenis
     function db_get_orders_report($date_start, $date_end, $price_start, $price_end) {
-        # Due to my lack of mental capacity I had to use
-        # 3 queries instead of 1 and count totals with php.
-        $employees = db_get_filtered_agency_employees($stazas_start, $stazas_end);
-        $ads = db_get_filtered_agency_ads($date_start, $date_end);
-        $orders = db_get_filtered_agency_orders($date_start, $date_end);
+        $orders_money_sum = db_filtering($date_start, $date_end, $price_start, $price_end, "SELECT SUM(`uzsakymas`.`kaina`) as 'sum'", "");
+        $count_orders = db_filtering($date_start, $date_end, $price_start, $price_end, "SELECT COUNT(`uzsakymas`.`nr`) as 'count'", "");
+        $vendor_info = db_filtering($date_start, $date_end, $price_start, $price_end,
+            "SELECT `tiekejas`.`fk_naudotojo_slapyvardis`, COUNT(`reklama`.`fk_tiekejo_id`) as 'count', SUM(`uzsakymas`.`kaina`) as 'sum'",
+            "GROUP BY `reklama`.`fk_tiekejo_id` ORDER BY `sum` DESC;");
+        $agency_info = db_filtering($date_start, $date_end, $price_start, $price_end,
+            "SELECT `agentura`.`pavadinimas`, COUNT(`agentura`.`id`) as 'count', SUM(`uzsakymas`.`kaina`) as 'sum'",
+            "GROUP BY `agentura`.`id` ORDER BY `sum` DESC;");
 
+        $results = array(
+            "orders_money_sum" => $orders_money_sum,
+            "count_orders" => $count_orders,
+            "vendor_info" => $vendor_info,
+            "agency_info" => $agency_info
+        );
+
+
+
+        /*
         # create arrays of data so that i can be reused later
         $employees_arr = array();
         $ads_arr = array();
@@ -146,7 +201,8 @@
             # push results to final results array
             array_push($final_results, $employee);
         }
+        */
 
-        return $final_results;
+        return $results;
     }
 ?>

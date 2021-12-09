@@ -29,30 +29,26 @@
                 if (isset($url_components['query'])) {
                     parse_str($url_components['query'], $params);
 
-                    # date_start
                     if (check_if_valid_param('date_start', $params)) {
                         $date_start = $params['date_start'];
                     } else {
                         $is_wrong_url = true;
                     }
 
-                    # date_end
                     if (check_if_valid_param('date_end', $params)) {
                         $date_end = $params['date_end'];
                     } else {
                         $is_wrong_url = true;
                     }
 
-                    # stazas_start
                     if (check_if_valid_param('price_start', $params)) {
-                        $stazas_start = $params['price_start'];
+                        $price_start = $params['price_start'];
                     } else {
                         $is_wrong_url = true;
                     }
 
-                    # stazas_end
                     if (check_if_valid_param('price_end', $params)) {
-                        $stazas_end = $params['price_end'];
+                        $price_end = $params['price_end'];
                     } else {
                         $is_wrong_url = true;
                     }
@@ -76,27 +72,6 @@
                 <aside>
                     <p><b>Ataskaitos sudarymo data ir laikas:</b> <?php echo $date_today ?></p>
 
-                    <div class="description-container">
-                        <ul class="list">
-                            <li><b>Agentūros vadovo informacija:</b></li>
-                            <li><b>Vardas:</b> <?php echo $agency_data['vardas'] ?></li>
-                            <li><b>Pavardė:</b> <?php echo $agency_data['pavarde'] ?></li>
-                            <li><b>Tel. nr.:</b> <?php echo $agency_data['tel_nr'] ?></li>
-                            <li><b>El-paštas:</b> <?php echo $agency_data['email'] ?></li>
-                        </ul>
-
-                        <ul class="list">
-                            <li><b>Agentūros informacija:</b></li>
-                            <li><b>Pavadinimas:</b> <?php echo $agency_data['pavadinimas'] ?></li>
-                            <li><b>Sukūrimo data:</b> <?php echo $agency_data['sukurimo_data'] ?></li>
-                            <li><b>Miestas:</b> <?php echo $agency_data['miestas'] ?></li>
-                            <li><b>Adresas:</b> <?php echo $agency_data['adresas'] ?></li>
-                            <li><b>Pašto kodas:</b> <?php echo $agency_data['pasto_kodas'] ?></li>
-                            <li><b>Įmonės kodas:</b> <?php echo $agency_data['imones_kodas'] ?></li>
-                            <li><b>Aprašymas:</b> <?php echo $agency_data['aprasymas'] ?></li>
-                        </ul>
-                    </div>
-
                     <h4>Ataskaitoje vaizduojami duomenys su žemiau pritaikytais filtrais:</h4>
                     <p>
                         Užregistruotų reklamų ir užsakymų sudarymo data nuo
@@ -105,21 +80,21 @@
                     </p>
                     <p>
                         <?php
-                            if ($stazas_start >= 0 && $stazas_end >= 0) {
+                            if ($price_start >= 0 && $price_end > 0) {
                                 echo "
-                                    Darbuotojų darbo stažas nuo
-                                    <b>$stazas_start</b>
-                                    iki <b>$stazas_end</b> metų
+                                    Mėnesinė kaina nuo
+                                    <b>$price_start</b>
+                                    iki <b>$price_end</b> &euro;
                                 ";
-                            } else if ($stazas_start >= 0 && $stazas_end == -1) {
+                            } else if ($price_start >= 0) {
                                 echo "
-                                    Darbuotojų darbo stažas nuo
-                                    <b>$stazas_start</b> metų
+                                    Mėnesinė kaina nuo
+                                    <b>$price_start</b> &euro;
                                 ";
-                            } else if ($stazas_start == -1 && $stazas_end >= 0) {
+                            } else if ($price_end > 0) {
                                 echo "
-                                    Darbuotojų darbo stažas iki
-                                    <b>$stazas_end</b> metų
+                                    Mėnesinė kaina iki
+                                    <b>$price_end</b> &euro;
                                 ";
                             }
                         ?>
@@ -131,48 +106,30 @@
                         die();
                     }
                 ?>
+
+                <div class="description-container">
+                    <ul class="list">
+                        <li><b>Ataskaitos informacija:</b></li>
+                        <li><b>Viso užsakymų:</b> <?php echo implode(" ",$report_data['count_orders']->fetch_assoc()); ?></li>
+                        <li><b>Užsakymų suma:</b> <?php echo implode(" ",$report_data['orders_money_sum']->fetch_assoc()); ?></li>
+                    </ul>
+                </div>
+
                 <article>
                     <table>
                         <tr>
-                            <th>Darbuotojo vardas, pavardė</th>
-                            <th>Slapyvardis</th>
-                            <th>Įsidarbinimo data</th>
-                            <th>Darbo stažas</th>
-                            <th>Aktyvių reklamų sk.</th>
-                            <th>Neatyvių reklamų sk.</th>
-                            <th>Aktyvių užsakymų sk.</th>
-                            <th>Neaktyvių užsakymų sk.</th>
+                            <th>Darbuotojo slapyvardis</th>
+                            <th>Užsakymų kiekis</th>
+                            <th>Užsakymų kainos suma</th>
                         </tr>
 
                         <?php
-                            $full_darbo_stazas = 0;
-                            $sum_ads_active = 0;
-                            $sum_ads_inactive = 0;
-                            $sum_orders_active = 0;
-                            $sum_orders_inactive = 0;
-                            foreach($report_data as $row) {
-                                $full_darbo_stazas += $row['darbo_stazas'];
-
+                            foreach($report_data['vendor_info'] as $row) {
                                 echo "  <tr>
-                                            <td>".$row['vardas'].' '.$row['pavarde']."</td>
                                             <td>".$row['fk_naudotojo_slapyvardis']."</td>
-                                            <td>".$row['isidarbinimo_data']."</td>
-                                            <td>".$row['darbo_stazas']."</td>";
-                                foreach ($row as $person) {
-                                    if(gettype($person) == 'object') {
-                                        $sum_ads_active += $person->ads_active;
-                                        $sum_ads_inactive += $person->ads_inactive;
-                                        $sum_orders_active += $person->orders_active;
-                                        $sum_orders_inactive += $person->orders_inactive;
-
-                                        echo "
-                                            <td>".$person->ads_active."</td>
-                                            <td>".$person->ads_inactive."</td>
-                                            <td>".$person->orders_active."</td>
-                                            <td>".$person->orders_inactive."</td>";
-                                    }
-                                }
-                                echo "  </tr>";
+                                            <td>".$row['count']."</td>
+                                            <td>".$row['sum']."</td>
+                                        </tr>";
                             }
                         ?>
                     </table>
@@ -181,26 +138,19 @@
                     <h4>Filtrus atitinkančių duomenų bendros statistikos:</h4>
                     <table>
                         <tr>
-                            <th>Darbuotojų sk.</th>
-                            <th>Vidutinis darbo stažas</th>
-                            <th>Aktyvių reklamų sk.</th>
-                            <th>Neatyvių reklamų sk.</th>
-                            <th>Aktyvių užsakymų sk.</th>
-                            <th>Neaktyvių užsakymų sk.</th>
+                            <th>Agentūros pavadinimas</th>
+                            <th>Užsakymų kiekis</th>
+                            <th>Užsakymų kainos suma</th>
                         </tr>
 
                         <?php
-                            $employees_count = count($report_data);
-                            $avg_darbo_stazas = $full_darbo_stazas / $employees_count;
-
-                            echo "  <tr>
-                                        <td>".count($report_data)."</td>
-                                        <td>".round($avg_darbo_stazas, 2)."</td>
-                                        <td>".$sum_ads_active."</td>
-                                        <td>".$sum_ads_inactive."</td>
-                                        <td>".$sum_orders_active."</td>
-                                        <td>".$sum_orders_inactive."</td>
-                                    </tr>";
+                            foreach($report_data['agency_info'] as $row) {
+                                echo "  <tr>
+                                                <td>".$row['pavadinimas']."</td>
+                                                <td>".$row['count']."</td>
+                                                <td>".$row['sum']."</td>
+                                            </tr>";
+                            }
                         ?>
 
                     </table>

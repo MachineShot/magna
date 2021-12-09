@@ -7,10 +7,13 @@
             $error = "";
             $success = "";
 
-            if ($_POST != null) {
+            date_default_timezone_set('Europe/Vilnius');
+            $curr_date = date("Y-m-d");
 
+            if ($_POST != null) {
                 $start_date = $_POST['start_date'];
                 $end_date = $_POST['end_date'];
+                $last_date = $_POST['last_date'];
                 $id = $_POST['id'];
 
                 if ($start_date == "") {
@@ -19,9 +22,29 @@
                 if ($end_date == "") {
                     $error .= "*Privalote nurodyti pabaigos datą.<br>";
                 }
+                if($start_date > $end_date){
+                    $error .= "*Pradžios data negali būti didesnė už pabaigos datą.<br>";
+                }
+                if($start_date > $last_date){
+                    $error .= "*Pradžios data negali būti didesnė už pasiūlymo galiojimo datą.<br>";
+                }
+                if($curr_date > $start_date){
+                    $error .= "*Pradžios data negali būti mažesnė už dabartinę datą.<br>";
+                }
+                if($curr_date > $end_date){
+                    $error .= "*Pabaigos data negali būti mažesnė už dabartinę datą.<br>";
+                }
+                if($curr_date > $last_date){
+                    $error .= "*Dabartinė data negali būti didesnė už pasiūlymo galiojimo datą.<br>";
+                }
+                if($start_date > $last_date){
+                    $error .= "*Pradžios data negali būti didesnė už pasiūlymo galiojimo datą.<br>";
+                }
 
-                db_add_order($start_date, $end_date, $id);
-                $success = "Sėkmingai sukurtas užsakymas.";
+                if($error === ""){
+                    db_add_order($start_date, $end_date, $id);
+                    $success = "Sėkmingai sukurtas užsakymas.";
+                }
             }
         ?>
             <link rel='stylesheet' href='../../styles/forms.css'>
@@ -63,7 +86,6 @@
                     }
 
                     $data = db_get_ad($id);
-                    date_default_timezone_set('Europe/Vilnius');
                     $start_date = date("Y-m-d\TH:i");
                     $end_date = $data['galiojimo_laikotarpis'];
                 ?>
@@ -100,6 +122,7 @@
                             <input name='end_date' id="end_date" type='datetime-local' value="<?php echo $end_date; ?>" required>
                         </div>
                         <input name='id' type='hidden' value="<?php echo $data['id']; ?>">
+                        <input name='last_date' type='hidden' value="<?php echo $data['galiojimo_laikotarpis']; ?>">
                         <div>
                             <button type='button' class='form-submit-button' onclick='toggleFormSubmit()'>
                                 Pateikti duomenis

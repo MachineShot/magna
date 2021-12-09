@@ -74,5 +74,135 @@
         db_send_query($sql);
     }
 
+    function db_filtering($date_start, $date_end, $price_start, $price_end, $func, $group_by) {
+        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
+        $whereClauseString = "";
+        if(!empty($date_start)) {
+            $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`)>='$date_start'";
+            if(!empty($date_end)) {
+                $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`) <= '$date_end'";
+            }
+        } else {
+            if(!empty($date_end)) {
+                $whereClauseString .= " AND DATE(`uzsakymas`.`sudarymo_data`) <= '$date_end'";
+            }
+        }
+
+        if(!empty($price_start)) {
+            $whereClauseString .= " AND `uzsakymas`.`kaina` >= '$price_start'";
+            if(!empty($price_end)) {
+                $whereClauseString .= " AND `uzsakymas`.`kaina` <= '$price_end'";
+            }
+        } else {
+            if(!empty($price_end)) {
+                $whereClauseString .= " AND `uzsakymas`.`kaina` <= '$price_end'";
+            }
+        }
+
+        #var_dump($whereClauseString);
+
+        $sql = "$func
+                FROM `uzsakymas`
+                INNER JOIN `reklama` ON `reklama`.`id` = `uzsakymas`.`fk_reklama_id`
+                INNER JOIN `tiekejas` ON `tiekejas`.`id` = `reklama`.`fk_tiekejo_id`
+                INNER JOIN `idarbina` ON `idarbina`.`fk_tiekejas_id` = `reklama`.`fk_tiekejo_id`
+                INNER JOIN `agentura` ON `agentura`.`id` = `idarbina`.`fk_agentura_id`
+                WHERE 
+                    `fk_uzsakovo_slapyvardis` = '$user' 
+                    $whereClauseString
+                $group_by
+            ";
+        return db_send_query($sql);
+    }
+
+    # Gauti ataskaitos duomenis
+    function db_get_orders_report($date_start, $date_end, $price_start, $price_end) {
+        $orders_money_sum = db_filtering($date_start, $date_end, $price_start, $price_end, "SELECT SUM(`uzsakymas`.`kaina`) as 'sum'", "");
+        $count_orders = db_filtering($date_start, $date_end, $price_start, $price_end, "SELECT COUNT(`uzsakymas`.`nr`) as 'count'", "");
+        $vendor_info = db_filtering($date_start, $date_end, $price_start, $price_end,
+            "SELECT `tiekejas`.`fk_naudotojo_slapyvardis`, COUNT(`reklama`.`fk_tiekejo_id`) as 'count', SUM(`uzsakymas`.`kaina`) as 'sum'",
+            "GROUP BY `reklama`.`fk_tiekejo_id` ORDER BY `sum` DESC;");
+        $agency_info = db_filtering($date_start, $date_end, $price_start, $price_end,
+            "SELECT `agentura`.`pavadinimas`, COUNT(`agentura`.`id`) as 'count', SUM(`uzsakymas`.`kaina`) as 'sum'",
+            "GROUP BY `agentura`.`id` ORDER BY `sum` DESC;");
+
+        $results = array(
+            "orders_money_sum" => $orders_money_sum,
+            "count_orders" => $count_orders,
+            "vendor_info" => $vendor_info,
+            "agency_info" => $agency_info
+        );
+
+
+
+        /*
+        # create arrays of data so that i can be reused later
+        $employees_arr = array();
+        $ads_arr = array();
+        $orders_arr = array();
+
+        while($row = mysqli_fetch_assoc($employees)) {
+            array_push($employees_arr, $row);
+        }
+
+        while($row = mysqli_fetch_assoc($ads)) {
+            array_push($ads_arr, $row);
+        }
+
+        while($row = mysqli_fetch_assoc($orders)) {
+            array_push($orders_arr, $row);
+        }
+
+        $final_results = array();
+
+        # Count totals of ads and orders for each employee
+        foreach ($employees_arr as $employee) {
+            # count totals of ads
+            $ads_active = 0;
+            $ads_inactive = 0;
+            foreach ($ads_arr as $ad) {
+                if ($ad['slapyvardis'] == $employee['fk_naudotojo_slapyvardis']) {
+                    $val = $ad['reklamos_busena'];
+                    if ($val != null) {
+                        if ($val == 1) {
+                            $ads_active++;
+                        } else {
+                            $ads_inactive++;
+                        }
+                    }
+                }
+            }
+
+            # count totals of orders
+            $orders_active = 0;
+            $orders_inactive = 0;
+            foreach ($orders_arr as $order) {
+                if ($order['slapyvardis'] == $employee['fk_naudotojo_slapyvardis']) {
+                    $val = $order['uzsakymo_busena'];
+                    if ($val != null) {
+                        if ($val == "neaktyvi") {
+                            $orders_inactive++;
+                        } else {
+                            $orders_active++;
+                        }
+                    }
+                }
+            }
+
+            # push counted totals to the array(employee) of current iteration
+            array_push($employee, (object) [
+                'ads_active' => $ads_active,
+                'ads_inactive' => $ads_inactive,
+                'orders_active' => $orders_active,
+                'orders_inactive' => $orders_inactive
+            ]);
+
+            # push results to final results array
+            array_push($final_results, $employee);
+        }
+        */
+
+        return $results;
+    }
 ?>

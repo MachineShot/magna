@@ -1,18 +1,20 @@
 <?php
     include '../../phpUtils/connectToDB.php';
 
-    $user = "uzs1"; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+    $user = $_SESSION['username_login'];
 
     # Peržiūrėti visas reklamas
     function db_get_all_ads() {
         $sql = "SELECT `reklama`.*, `fizine_reklama`.`miestas`, `fizine_reklama`.`adresas`,
         `fizine_reklama`.`koordinates`, `fizine_reklama`.`dydis`,
-        `internetine_reklama`.`puslapio_adresas`, `internetine_reklama`.`tipas`
+        `internetine_reklama`.`puslapio_adresas`, `internetine_reklama`.`tipas`, `tiekejas`.`fk_naudotojo_slapyvardis` as `tiekejas`
                 FROM `reklama`
                 LEFT JOIN `fizine_reklama`
                     ON `reklama`.`id` = `fizine_reklama`.`fk_reklamos_id`
                 LEFT JOIN `internetine_reklama`
                     ON `reklama`.`id` = `internetine_reklama`.`fk_reklamos_id`
+                LEFT JOIN `tiekejas`
+                    ON `reklama`.`fk_tiekejo_id` = `tiekejas`.`id`
                 WHERE `aktyvi` = 1";
         return db_send_query($sql);
     }
@@ -26,20 +28,28 @@
 
     # Peržiūrėti visas užsakytas reklamas
     function db_get_ordered_ads() {
-        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        global $user; 
         $sql = "SELECT  `uzsakymas`.`nr` as `id`, `uzsakymas`.`kaina`, `uzsakymas`.`sudarymo_data`,
                         `uzsakymas`.`pabaigos_data`, `uzsakymas`.`busena`,
-                        `reklama`.`pavadinimas`
+                        `reklama`.`pavadinimas`, `reklama`.`fk_tiekejo_id`, `fizine_reklama`.`miestas`, `fizine_reklama`.`adresas`,
+                        `fizine_reklama`.`koordinates`, `fizine_reklama`.`dydis`,
+                        `internetine_reklama`.`puslapio_adresas`, `internetine_reklama`.`tipas`, `tiekejas`.`fk_naudotojo_slapyvardis` as `tiekejas`
                 FROM `uzsakymas`
                 INNER JOIN `reklama`
                 	ON `reklama`.`id` = `fk_reklama_id`
+                LEFT JOIN `fizine_reklama`
+                    ON `reklama`.`id` = `fizine_reklama`.`fk_reklamos_id`
+                LEFT JOIN `internetine_reklama`
+                    ON `reklama`.`id` = `internetine_reklama`.`fk_reklamos_id`
+                LEFT JOIN `tiekejas`
+                    ON `reklama`.`fk_tiekejo_id` = `tiekejas`.`id`
                 WHERE fk_uzsakovo_slapyvardis = '$user'";
         return db_send_query($sql);
     }
 
     # Gauti vieną užsakytą reklamą
     function db_get_ordered_ad($id) {
-        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        global $user; 
         $sql = "SELECT  `uzsakymas`.`nr` as `id`, `uzsakymas`.`kaina`, `uzsakymas`.`sudarymo_data`,
                         `uzsakymas`.`pabaigos_data`, `uzsakymas`.`busena`,
                         `reklama`.`pavadinimas`
@@ -61,7 +71,7 @@
 
     # "Kurti užsakymą"
     function db_add_order($start_date, $end_date, $id) {
-        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        global $user; 
 
         # Get info about advert
         $data = db_get_ad($id);
@@ -75,7 +85,7 @@
     }
 
     function db_filtering($date_start, $date_end, $price_start, $price_end, $func, $group_by) {
-        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        global $user; 
 
         $whereClauseString = "";
         if(!empty($date_start)) {

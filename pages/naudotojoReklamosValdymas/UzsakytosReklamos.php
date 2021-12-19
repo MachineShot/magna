@@ -42,6 +42,15 @@
                                 <th>Kaina</th>
                                 <th>Sudarymo data</th>
                                 <th>Pabaigos data</th>
+                                <th>Tiekėjas</th>
+                                <th>Fizine</th>
+                                <th>Miestas</th>
+                                <th>Adresas</th>
+                                <th>Koordinatės</th>
+                                <th>Dydis</th>
+                                <th>Internetine</th>
+                                <th>Puslapio adresas</th>
+                                <th>Dydis</th>
                                 <th>Būsena</th>
                             </tr>
 
@@ -54,6 +63,36 @@
                                                 <td>".$row['kaina']."</td>
                                                 <td>".$row['sudarymo_data']."</td>
                                                 <td>".$row['pabaigos_data']."</td>
+                                                <td>".$row['tiekejas']."</td>";
+                                                if($row['miestas'] == null){
+                                                    echo "  <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                    ";
+                                                }
+                                                else{
+                                                    echo "  <td>&#9989;</td>
+                                                            <td>".$row['miestas']."</td>
+                                                            <td>".$row['adresas']."</td>
+                                                            <td>".$row['koordinates']."</td>
+                                                            <td>".$row['dydis']."</td>
+                                                    ";
+                                                }
+                                                if($row['puslapio_adresas'] == null){
+                                                    echo "  <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                            <td>&#10060;</td>
+                                                    ";
+                                                }
+                                                else{
+                                                    echo "  <td>&#9989;</td>
+                                                            <td>".$row['puslapio_adresas']."</td>
+                                                            <td>".$row['tipas']."</td>
+                                                    ";
+                                                }
+                                                echo "
                                                 <td>".$row['busena']."</td>
                                                 <td class='td-remove-entry'>
                                                     <form method='post' id='remove_ordered_ad_form".$id."'>

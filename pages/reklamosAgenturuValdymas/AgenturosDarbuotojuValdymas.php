@@ -57,7 +57,7 @@
                 if ($is_wrong_url) {
                     echo "  <h4>URL neteisingai nurodytas agentūros darbuotojo indeksas.</h4>
                             <h4>Patikrinkite puslapio adresą ir bandykite dar kartą.</h4>";
-                    die();
+                    $invisible = 1;
                 }
 
                 if ($error != "") {
@@ -72,7 +72,7 @@
                 $stazas = $data['darbo_stazas'];
             ?>
 
-            <table>
+            <table style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <tr>
                     <th>Vardas, Pavardė</th>
                     <th>Slapyvardis</th>
@@ -93,7 +93,7 @@
                 ?>
             </table>
 
-            <div class="form-wrapper">
+            <div class="form-wrapper" style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <form method="post" id="update_employee_form">
                     <div>
                         <label for="adresas">Tiekėjo adresas:</label><br>

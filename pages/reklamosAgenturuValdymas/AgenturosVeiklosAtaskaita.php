@@ -69,7 +69,7 @@
                 if ($is_wrong_url) {
                     echo "  <h4>URL neteisingai nurodyti duomenys.</h4>
                             <h4>Patikrinkite puslapio adresą ir bandykite dar kartą.</h4>";
-                    die();
+                    $invisible = 1;
                 }
 
                 $date_today = date('Y-m-d H:i:s');
@@ -77,7 +77,7 @@
                 $report_data = db_get_agency_report($date_start, $date_end, $stazas_start, $stazas_end);
             ?>
 
-            <section>
+            <section style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <aside>
                     <p><b>Ataskaitos sudarymo data ir laikas:</b> <?php echo $date_today ?></p>
 
@@ -133,10 +133,10 @@
                 <?php
                     if (count($report_data) == 0) {
                         echo "<h3>Filtrus atitinkančių duomenų nėra.</h3>";
-                        //die();
+                        $invisible = 2;
                     }
                 ?>
-                <article>
+                <article style="<?php if ($invisible == 2) echo 'display:none'?>">
                     <table>
                         <tr>
                             <th>Darbuotojo vardas, pavardė</th>
@@ -182,7 +182,7 @@
                         ?>
                     </table>
                 </article>
-                <article>
+                <article style="<?php if ($invisible == 2) echo 'display:none'?>">
                     <h4>Filtrus atitinkančių duomenų bendros statistikos:</h4>
                     <table>
                         <tr>

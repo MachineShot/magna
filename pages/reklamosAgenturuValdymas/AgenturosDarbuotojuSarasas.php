@@ -43,11 +43,11 @@
                 $result = db_get_all_agency_employees();
                 if ($result->num_rows == 0) {
                     echo "<h4>Jūsų agentūroje nėra nei vieno darbuotojo.</h4>";
-                    die();
+                    $invisible = 1;
                 }
             ?>
 
-            <div class='filtering-wrapper'>
+            <div class='filtering-wrapper' style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <label for='filtering-input-id'>
                     Sąrašo filtravimas pagal darbuotojo
                     <b>vardą</b>
@@ -57,9 +57,9 @@
                 <input id='filtering-input-id' class='filtering-input' onkeyup='filterData();'></input>
             </div>
 
-            <h4 id='no-data-id' class='invisible'>Filtrus atitinkančių darbuotojų nėra.</h4>
+            <h4 id='no-data-id' class='invisible' style="<?php if ($invisible == 1) echo 'display:none'?>">Filtrus atitinkančių darbuotojų nėra.</h4>
 
-            <table id='data-table'>
+            <table id='data-table' style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <tr>
                     <th>Vardas, Pavardė</th>
                     <th>Slapyvardis</th>

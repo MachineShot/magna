@@ -3,7 +3,10 @@
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
     include '../../phpUtils/startSession.php';
-    if (isset($_POST['Registracija'])){procregister();}
+    if (isset($_POST['Registracija'])){
+    inisession("part");
+    procregister();
+    }
     if ($_SESSION['username_login']!="" || ($_SESSION['prev'] != "index" && $_SESSION['prev'] != "prisijungimas" && $_SESSION['prev'] != "procregister"))
     {
        header("Location:../../index.php");
@@ -20,6 +23,7 @@
     <body>
         <div id="app" style="padding: 0;">
             <navigation usertype="<?php echo $_SESSION['ulevel'];?>"></navigation>
+            <?php echo $_SESSION['message'];?>
             <h2>Registracija</h2>
         </div>
         <div class="card">

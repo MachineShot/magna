@@ -4,7 +4,7 @@ include '../../phpUtils/settings.php';
 
 function procregister(){
     if (!isset($_SESSION['prev']) || $_SESSION['prev'] != "registracija") {
-        header("Location: logout.php");
+        header("Location: Atsijungti.php");
         exit();
     }
     $_SESSION['prev'] = "procregister";
@@ -74,29 +74,28 @@ function procregister(){
 
 function proclogin(){
     if (!isset($_SESSION['prev']) || $_SESSION['prev'] != "prisijungimas") {
-        header("Location: logout.php");
+        header("Location: Atsijungti.php");
         exit();
     }
     $_SESSION['prev'] = "proclogin";
     $_SESSION['name_error'] = "";
-    $_SESSION['pass_error'] = "";
     $user = strtolower($_POST['username']);
 
-    if (isset($_POST['problem'])) {
-        $_SESSION['message'] = "Turi būti įvestas galiojantis vartotojo vardas";
-    } else {
-        $_SESSION['message'] = "Pabandykite dar kartą";
-    }
+
     if (checkusername($user)) {
         list($dbuname, $dbupass, $dbulevel, $dbumai) = checkdb($user);
+        $_SESSION['message'] = "Tokio naudotojo nėra";
         if ($dbuname) {
             $pass = $_POST['pass'];
+            $_SESSION['message'] = "";
             if (checkpass($pass, $dbupass)) {
                 $_SESSION['username_login'] = $user;
                 $_SESSION['umail'] = $dbumai;
                 $_SESSION['pass_login'] = $pass;
                 $_SESSION['ulevel'] = $dbulevel;
                 $_SESSION['message'] = "";
+                header("Location:../../index.php");
+                exit();
             }
         }
     }
@@ -133,14 +132,20 @@ function updateInformation(){
 
 function deleteAccount(){
     $username = $_SESSION['username_login'];
+    $candelete = db_can_i_delete($_SESSION['username']);
+    if($candelete){
     $sql = "DELETE FROM `naudotojas`
-            WHERE `slapyvardis` = '$username'";
-            if (db_send_query($sql)){
-                header("Location: Atsijungti.php");
-                exit();
-            }
-   header("Location: PaskyrosTrynimas.php");
-   exit();
+                WHERE `slapyvardis` = '$username'";
+                if (db_send_query($sql)){
+                    header("Location: Atsijungti.php");
+                    exit();
+                }
+    }
+    header("Location:../../index.php");
+    exit();
+
+
+
 }
 
 function updatePassword()
@@ -277,4 +282,24 @@ function checkmail($mail){
         return true;
     }
 }
+
+
+function db_can_i_delete($username) {
+        $sql = "SELECT
+                    `fk_naudotojo_slapyvardis`
+                FROM `tiekejas`
+                WHERE `fk_naudotojo_slapyvardis` = '$username'";
+        $result = db_send_query($sql);
+        $sql2 = "SELECT
+                            `id`
+                        FROM `agentura`
+                        WHERE `fk_vadovo_slapyvardis` = '$username'";
+                $result2 = db_send_query($sql);
+
+        if ($result->num_rows != 0 || $result2->num_rows != 0) {
+            return false;
+        }
+
+        return true;
+    }
 ?>

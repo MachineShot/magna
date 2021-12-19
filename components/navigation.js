@@ -7,8 +7,12 @@ Vue.component("navigation", {
             </div>
             <hr>
             <nav class='main-nav'>
+            <ul>
+            </ul>
                 <ul>
+                    <li v-if="usertype !== ''">Informacinė skiltis</li>
                     <li v-if="usertype !== ''"><a href='/isp/pages/naudotojoDaliesValdymas/Atsijungti.php'>Atsijungti</li>
+                    <li v-if="usertype !== ''"><a href='/isp/index.php'>Atgal į pagrindinį langą</li>
                     <li v-if="usertype !== ''">
                         <b>Paskyros tipas: {{usertype}}</b> <br>
                     </li>

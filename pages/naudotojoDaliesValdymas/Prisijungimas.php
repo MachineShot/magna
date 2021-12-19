@@ -3,7 +3,10 @@
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
     include '../../phpUtils/startSession.php';
-    if(isset($_POST['Prisijungimas'])) {proclogin();}
+    if(isset($_POST['Prisijungimas'])) {
+    inisession("part");
+    proclogin();
+    }
     if ($_SESSION['username_login']!="" || ($_SESSION['prev'] != "index" && $_SESSION['prev'] != "registracija"
      && $_SESSION['prev'] != "proclogin"))
     {
@@ -20,6 +23,7 @@
     <body>
         <div id="app" style="padding: 0;">
             <navigation usertype="<?php echo $_SESSION['ulevel'];?>"></navigation>
+            <?php echo $_SESSION['message'];?>
             <h2>Prisijungimas</h2>
         </div>
         <div class="card">

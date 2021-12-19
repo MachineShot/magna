@@ -57,7 +57,7 @@
                                                 <td>".$row['kaina']."</td>
                                                 <td>".$row['sudarymo_data']."</td>
                                                 <td>".$row['galiojimo_laikotarpis']."</td>
-                                                <td>".$row['fk_tiekejo_id']."</td>";
+                                                <td>".$row['tiekejas']."</td>";
                                                 if($row['miestas'] == null){
                                                     echo "  <td>&#10060;</td>
                                                             <td>&#10060;</td>

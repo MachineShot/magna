@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <?php
-            include '../../phpUtils/renderHead.php';
+                    include '../../phpUtils/renderHead.php';
+                    if ($_SESSION['username_login']=="")
+                    {
+                        header("Location:../../index.php");
+                        exit();
+                    }
             include '../../phpScripts/naudotojoReklamosValdymas.php';
 
             $error = "";
@@ -105,7 +110,7 @@
                                     <td>".$data['kaina']."</td>
                                     <td>".$data['sudarymo_data']."</td>
                                     <td>".$data['galiojimo_laikotarpis']."</td>
-                                    <td>".$data['fk_tiekejo_id']."</td>
+                                    <td>".$data['tiekejas']."</td>
                                 </tr>
                             ";
                     ?>

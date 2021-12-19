@@ -1,11 +1,10 @@
 <?php
     include '../../phpUtils/connectToDB.php';
 
-    $agenturos_id = 1; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
-
     # "Peržiūrėti darbuotojus"
     function db_get_all_agency_employees() {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         $sql = "SELECT
                 `id`,
@@ -27,7 +26,8 @@
 
     # get data of passed employee id
     function db_get_agency_employee($employee_id) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         $sql = "SELECT
                 `id`,
@@ -48,7 +48,8 @@
 
     # "Kurti darbuotoją"
     function db_add_agency_employee($adresas, $stazas, $slapyvardis) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         # add entry in 'tiekejas' table
         $date = date('Y-m-d');
@@ -91,7 +92,8 @@
         
     # "Šalinti darbuotoją"
     function db_remove_agency_employee($id) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
         
         # check whether an employee can be removed from the agency
         $does_have_ads = db_does_employee_have_ads($id);
@@ -111,7 +113,8 @@
         
     # "Redaguoti darbuotojo informaciją"
     function db_update_agency_employee_info($adresas, $stazas, $id) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
 		$sql = "UPDATE `tiekejas`
 				SET
@@ -123,7 +126,8 @@
 
     # get all filtered agency orders and their statuses
     function db_get_filtered_agency_orders($date_start, $date_end) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         $sql = "SELECT
                     `tiekejas`.`fk_naudotojo_slapyvardis` as 'slapyvardis',
@@ -144,7 +148,8 @@
 
     # get all filtered ads and their statuses of an agency
     function db_get_filtered_agency_ads($date_start, $date_end) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         $sql = "SELECT
                     `tiekejas`.`fk_naudotojo_slapyvardis` as 'slapyvardis',
@@ -163,7 +168,8 @@
 
     # get all filtered agency employees
     function db_get_filtered_agency_employees($stazas_start, $stazas_end) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         # if $stazas_end == -1 then it means it was not set
         $stazas_filter = '';
@@ -270,7 +276,8 @@
 
     # get all data about current agency 
     function db_get_agency_data() {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
 
         $sql = "SELECT
                     `pavadinimas`,
@@ -293,7 +300,8 @@
 
     # check whether an employee already works in this agency
     function db_is_employee_already_in_this_agency($slapyvardis) {
-        global $agenturos_id; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+        include '../../phpUtils/startSession.php';
+        $agenturos_id = $_SESSION['uagencyid'];
         
         # get id of the newly created entry
         $sql = "SELECT

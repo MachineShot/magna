@@ -2,7 +2,7 @@
 <html>
 <?php
     include './phpUtils/settings.php';
-    include './phpUtils/startSession.php';
+    include './phpUtils/renderHead.php';
     if (!isset($_SESSION['username_login']))
     {
         inisession("full");

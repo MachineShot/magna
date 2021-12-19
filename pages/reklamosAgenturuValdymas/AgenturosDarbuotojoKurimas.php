@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <?php
-        include '../../phpUtils/renderHead.php';
+            include '../../phpUtils/renderHead.php';
+            if ($_SESSION['username_login']=="")
+            {
+               header("Location:../../index.php");
+               exit();
+            }
         include '../../phpScripts/reklamosAgenturuValdymas.php';
 
         $error = "";
@@ -53,11 +58,11 @@
                 $result = db_get_all_providers();
                 if (count($result) == 0) {
                     echo "<h4>Sistemoje registruotų tiekėjų, kuriuos būtų galima įdarbinti, nėra.</h4>";
-                    die();
+                    $invisible = 1;
                 }
             ?>
 
-            <div class="form-wrapper">
+            <div class="form-wrapper" style="<?php if ($invisible == 1) echo 'display:none'?>">
                 <form method="post" id="new_employee_form">
                     <div>
                         <label for="slapyvardis">Pasirinkite tiekėją, kurį norite įdarbinti:</label><br>

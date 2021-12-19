@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <?php
-    include '../../phpUtils/renderHead.php';
+            include '../../phpUtils/renderHead.php';
+            if ($_SESSION['username_login']=="")
+            {
+                header("Location:../../index.php");
+                exit();
+            }
     include '../../phpScripts/naudotojoReklamosValdymas.php';
     $error = "";
     $success = "";
@@ -57,7 +62,7 @@
                                                 <td>".$row['kaina']."</td>
                                                 <td>".$row['sudarymo_data']."</td>
                                                 <td>".$row['galiojimo_laikotarpis']."</td>
-                                                <td>".$row['fk_tiekejo_id']."</td>";
+                                                <td>".$row['tiekejas']."</td>";
                                                 if($row['miestas'] == null){
                                                     echo "  <td>&#10060;</td>
                                                             <td>&#10060;</td>

@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 <?php
-include '../../phpUtils/renderHead.php';
+        include '../../phpUtils/renderHead.php';
+        if ($_SESSION['username_login']=="")
+        {
+            header("Location:../../index.php");
+            exit();
+        }
 include '../../phpScripts/tiekejoReklamosValdymas.php';
 $error = "";
 $success = "";
@@ -25,11 +30,11 @@ $success = "";
     $result = db_get_all_ordered_ads();
     if ($result->num_rows == 0) {
         echo "<h4>Nėra nei vienos reklamos.</h4>";
-        die();
+        $invisible = 1;
     }
     ?>
 
-    <table id='data-table'>
+    <table id='data-table' style="<?php if ($invisible == 1) echo 'display:none'?>">
         <tr>
             <th>ID</th>
             <th>Kaina</th>

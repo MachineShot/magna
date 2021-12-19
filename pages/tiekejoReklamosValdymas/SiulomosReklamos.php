@@ -5,6 +5,13 @@ include '../../phpUtils/renderHead.php';
 include '../../phpScripts/tiekejoReklamosValdymas.php';
 $error = "";
 $success = "";
+
+    if ($_POST != null) {
+    $id = $_POST['id'];
+
+    db_remove_ad_provider($id);
+    $success = "Sėkmingai pašalinta reklama";
+    }
 ?>
 <link rel='stylesheet' href='../../styles/forms.css'>
 </head>
@@ -51,6 +58,14 @@ $success = "";
                                                 <td>".$row['galiojimo_laikotarpis']."</td>
                                                 <td>".$row['aktyvi']."</td>
                                     <td class='td-remove-entry'>
+                                        <form method='post' id='remove_employee_form".$id."'>
+                                            <input name='id' type='hidden' value='$id'>
+                                            <button type='button' class='td-remove-entry__button' onclick='toggleFormSubmit($id);'>
+                                                Šalinti
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class='td-remove-entry'>
                                         <button type='button' class='td-remove-entry__button' onclick='redirect($id);'>
                                             Redaguoti
                                         </button>
@@ -58,11 +73,11 @@ $success = "";
                                 </tr>
                                 <div class='form-submit-wrapper wrapper-id-".$id."'>
                                     <div class='form-submit-wrapper__content'>
-                                        <h3>Ar tikrai norite iš agentūros pašalinti darbuotoją?</h3>
+                                        <h3>Ar tikrai norite pašalinti reklamą</h3>
                                         <input class='form-submit-button form-submit-button--green' type='submit' form='remove_employee_form".$id."' value='Patvirtinti' onclick='toggleFormSubmit($id);'>
                                         <input class='form-submit-button form-submit-button--red' type='button' value='Atšaukti' onclick='toggleFormSubmit($id)'>
                                     </div>
-                                </div>     
+                                </div>
                             ";
         }
         ?>
@@ -74,6 +89,11 @@ $success = "";
     const app = new Vue({el: '#app'});
     const redirect = (id) => {
         window.location.href = `/isp/pages/tiekejoReklamosValdymas/siulomosReklamosValdymas.php?id=${id}`;
+    };
+
+    const toggleFormSubmit = (id) => {
+        const wrapper = document.getElementsByClassName(`wrapper-id-${id}`)[0];
+        wrapper.classList.toggle("form-visible");
     };
 </script>
 </body>

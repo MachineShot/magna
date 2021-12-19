@@ -86,7 +86,24 @@
                         `aktyvi` = '$aktyvi'
                     WHERE `id` = '$id'";
         db_send_query($sql);
-}
+    }
+
+    function db_remove_ad_provider($id) {
+        global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+
+        # check whether an employee can be removed from the agency
+            $sql = "DELETE FROM `internetine_reklama`
+                    WHERE `fk_reklamos_id` = '$id'";
+            db_send_query($sql);
+
+            $sql = "DELETE FROM `fizine_reklama`
+                    WHERE `fk_reklamos_id` = '$id'";
+            db_send_query($sql);
+
+            $sql = "DELETE FROM `reklama`
+                    WHERE `id` = '$id'";
+            db_send_query($sql);
+    }
 
     # "Kurti nauja siuloma reklama"
     function db_add_new_ad($kaina, $pavadinimas, $aktyvi, $start_date, $end_date, $puslapio_adresas, $tipas, $miestas, $adresas, $koordinates, $dydis) {

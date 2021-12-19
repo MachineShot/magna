@@ -23,6 +23,7 @@ function inisession($arg) {   //valom sesijos kintamuosius
                 $_SESSION['prev']="";
             }
         $_SESSION['message']="";
+        $_SESSION['uagencyid']="";
         $_SESSION['username_error']="";
         $_SESSION['pass_error']="";
         $_SESSION['mail_error']="";

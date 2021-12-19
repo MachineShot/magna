@@ -110,7 +110,7 @@
                                     <td>".$data['kaina']."</td>
                                     <td>".$data['sudarymo_data']."</td>
                                     <td>".$data['galiojimo_laikotarpis']."</td>
-                                    <td>".$data['fk_tiekejo_id']."</td>
+                                    <td>".$data['tiekejas']."</td>
                                 </tr>
                             ";
                     ?>

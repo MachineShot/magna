@@ -3,6 +3,12 @@
     <?php
         include '../../phpUtils/renderHead.php';
         include '../../phpScripts/tiekejoReklamosValdymas.php';
+        include '../../phpUtils/startSession.php';
+        if ($_SESSION['username_login']=="")
+        {
+            header("Location:../../index.php");
+            exit();
+        }
 
         $error = "";
         $success = "";
@@ -10,19 +16,36 @@
         if ($_POST != null) {
             $pavadinimas = $_POST['pavadinimas'];
             $kaina = $_POST['kaina'];
+            //$start_date = $_POST['sudarymo_data'];
             $galiojimo_laikotarpis = $_POST['galiojimo_laikotarpis'];
             $aktyvi = $_POST['aktyvi'];
             $id = $_POST['id'];
 
-            db_update_ad_info_provider($kaina, $pavadinimas, $galiojimo_laikotarpis, $aktyvi, $id);
-            $success = "Sėkmingai atnaujinta siūlomos reklamos informacija.";
+//            if ($galiojimo_laikotarpis == "") {
+//                $error .= "*Privalote nurodyti galiojimo pabaigos datą.<br>";
+//            }
+//            if($start_date > $galiojimo_laikotarpis){
+//                $error .= "*Pradžios data negali būti didesnė už galiojimo pabaigos datą.<br>";
+//            }
+            if ($pavadinimas == "") {
+                $error .= "*Privalote nurodytį reklamos pavadinimą.<br>";
+            }
+
+            if ($kaina == "") {
+                $error .= "*Privalote nurodyti kainą.<br>";
+            }
+
+            if($error === ""){
+                db_update_ad_info_provider($kaina, $pavadinimas, $galiojimo_laikotarpis, $aktyvi, $id);
+                $success = "Sėkmingai atnaujinta siūlomos reklamos informacija.";
+            }
         }
     ?>
         <link rel='stylesheet' href='../../styles/forms.css'>
     </head>
     <body>
         <div id="app">
-            <navigation usertype="<?php echo $usertype;?>"></navigation>
+            <navigation usertype="<?php echo $_SESSION['ulevel'];?>"> </navigation>
 
             <h1>Siūlomos reklamos informacijos redagavimas</h1>
 
@@ -57,6 +80,7 @@
                 }
 
                 $data = db_get_ad_provider($id);
+                $start_date = $data['sudarymo_data'];
                 $pavadinimas = $data['pavadinimas'];
                 $kaina = $data['kaina'];
                 $galiojimo_laikotarpis = $data['galiojimo_laikotarpis'];
@@ -69,7 +93,7 @@
                     <th>Pavadinimas</th>
                     <th>Kaina</th>
                     <th>Sudarymo data</th>
-                    <th>Pabaigos data</th>
+                    <th>Galiojimo pabaigos data</th>
                     <th>Aktyvumas</th>
                 </tr>
                 
@@ -109,6 +133,7 @@
                         </select>
                     </div>
                     <input name='id' type='hidden' value="<?php echo $data['id']; ?>">
+                    <input name='sudarymo_data' type='hidden' value="<?php echo $data['sudarymo_data']; ?>">
                     <div>
                         <button type='button' class='form-submit-button' onclick='toggleFormSubmit()'>
                             Atnaujinti duomenis

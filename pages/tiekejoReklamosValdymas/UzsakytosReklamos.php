@@ -3,6 +3,12 @@
 <?php
 include '../../phpUtils/renderHead.php';
 include '../../phpScripts/tiekejoReklamosValdymas.php';
+include '../../phpUtils/startSession.php';
+if ($_SESSION['username_login']=="")
+{
+    header("Location:../../index.php");
+    exit();
+}
 $error = "";
 $success = "";
 ?>
@@ -10,7 +16,7 @@ $success = "";
 </head>
 <body>
 <div id="app">
-    <navigation usertype="<?php echo $usertype;?>"></navigation>
+    <navigation usertype="<?php echo $_SESSION['ulevel'];?>"> </navigation>
 
     <h1>Užsakytų reklamų sąrašas</h1>
 

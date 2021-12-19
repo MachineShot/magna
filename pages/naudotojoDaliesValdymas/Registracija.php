@@ -3,6 +3,7 @@
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
     include '../../phpUtils/startSession.php';
+    include '../../phpUtils/renderHead.php';
     if (isset($_POST['Registracija'])){
     inisession("part");
     procregister();

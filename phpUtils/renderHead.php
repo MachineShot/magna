@@ -1,19 +1,5 @@
 <?php
-    # login (set session variables)
     include 'startSession.php';
-    $usertype = isset($_SESSION["usertype"]) ? $_SESSION["usertype"] : "";
-    $usertype = "";
-    #$usertype = "tiekejas";
-    #$usertype = "vadovas";
-
-    if ($usertype == "vadovas") {
-        // nustatyt $_SESSION["agenturos_id"] (kuria agentura valdo prisijunges vadovas)
-    }
-
-    ########### padaryt, kad negaletu i neleidziamas posistemes eit naudotojas,
-    ########### o ne tik, kad navigacija isjungtu tam tikros posistemes,
-    ########### nes per adresa pvz. uzsakovas gali patekt i agenturos puslapius.
-
     echo 
     "  <head>
             <meta charset='UTF-8'>
@@ -24,6 +10,4 @@
             <link rel='stylesheet' href='/isp/styles/global.css'>
             <link rel='stylesheet' href='/isp/styles/navigation.css'>
     ";
-    # there is no closing head tag here in case there's a
-    # need for additional imports in different pages
 ?>

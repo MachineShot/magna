@@ -2,11 +2,11 @@
 <html>
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
-    include '../../phpUtils/startSession.php';
+    include '../../phpUtils/renderHead.php';
     if ($_SESSION['username_login']=="")
     {
-       header("Location:../../index.php");
-       exit();
+        header("Location:../../index.php");
+        exit();
     }
     $_SESSION['prev'] = "PaskyrosInformacijosKeitimas";
     if(isset($_POST['Keisti'])){updateInformation();}

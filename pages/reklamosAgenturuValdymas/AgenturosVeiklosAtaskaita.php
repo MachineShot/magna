@@ -2,6 +2,11 @@
 <html>
     <?php
         include '../../phpUtils/renderHead.php';
+        if ($_SESSION['username_login']=="")
+        {
+            header("Location:../../index.php");
+            exit();
+        }
         include '../../phpScripts/reklamosAgenturuValdymas.php';
     ?>
         <link rel='stylesheet' href='./ataskaitaStyle.css'>
@@ -128,7 +133,7 @@
                 <?php
                     if (count($report_data) == 0) {
                         echo "<h3>Filtrus atitinkančių duomenų nėra.</h3>";
-                        die();
+                        //die();
                     }
                 ?>
                 <article>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <?php
-        include '../../phpScripts/tiekejoReklamosValdymas.php';
-        include '../../phpUtils/startSession.php';
+        include '../../phpUtils/renderHead.php';
         if ($_SESSION['username_login']=="")
         {
             header("Location:../../index.php");
             exit();
         }
+        include '../../phpScripts/tiekejoReklamosValdymas.php';
         $error = "";
         $success = "";
 

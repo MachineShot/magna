@@ -2,6 +2,11 @@
 <html>
     <?php
         include '../../phpUtils/renderHead.php';
+        if ($_SESSION['username_login']=="")
+        {
+            header("Location:../../index.php");
+            exit();
+        }
         include '../../phpScripts/reklamosAgenturuValdymas.php';
     ?>
         <link rel='stylesheet' href='../../styles/forms.css'>

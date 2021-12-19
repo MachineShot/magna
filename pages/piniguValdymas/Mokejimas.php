@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <?php include '../../phpUtils/renderHead.php'; ?>
+    <?php         include '../../phpUtils/renderHead.php';
+        if ($_SESSION['username_login']=="")
+        {
+            header("Location:../../index.php");
+            exit();
+        } ?>
     </head>
     <body>
         <div id="app">

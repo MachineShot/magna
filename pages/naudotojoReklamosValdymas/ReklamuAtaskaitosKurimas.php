@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <?php
-        include '../../phpUtils/renderHead.php';
+                include '../../phpUtils/renderHead.php';
+                if ($_SESSION['username_login']=="")
+                {
+                    header("Location:../../index.php");
+                    exit();
+                }
         include '../../phpScripts/naudotojoReklamosValdymas.php';
     ?>
         <link rel='stylesheet' href='../../styles/forms.css'>

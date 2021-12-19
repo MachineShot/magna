@@ -2,7 +2,7 @@
 <html>
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
-    include '../../phpUtils/startSession.php';
+    include '../../phpUtils/renderHead.php';
     if (isset($_POST['Registracija'])){procregister();}
     if ($_SESSION['username_login']!="" || ($_SESSION['prev'] != "index" && $_SESSION['prev'] != "prisijungimas" && $_SESSION['prev'] != "procregister"))
     {

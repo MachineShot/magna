@@ -1,26 +1,59 @@
 <!DOCTYPE html>
 <html>
-    <?php include '../../phpUtils/renderHead.php'; ?>
-    </head>
+<?php
+    include '../../phpScripts/naudotojoDaliesValdymas.php';
+    $error = "";
+    $success = "";
+    include '../../phpUtils/startSession.php';
+    if ($_SESSION['username_login']=="")
+    {
+       header("Location:../../index.php");
+       exit();
+    }
+    if(isset($_POST['Keisti']))
+    {
+       updatePassword();
+    }
+?>
+    <link rel="stylesheet" href="../../styles/InputForm.css" />
     <body>
-        <div id="app">
-            <navigation usertype="<?php echo $usertype;?>"></navigation>
-
-            {{ message }}
-            <br>
-            <?php echo "2. If you see this then PHP works." ?>
-
-            <h1>Paskyros slaptazodzio keitimo langas.</h1>
+        <div id="app" style="padding: 0;">
+            <navigation usertype="<?php echo $_SESSION['ulevel'];?>"> </navigation>
+            <link rel="stylesheet" href="../../styles/forms.css" />
+            <h2 style="text-align: center;">Keisti paskyros slaptažodį</h2>
         </div>
-
-        <script src="../../components/navigation.js"></script>
-        <script>
-            const app = new Vue({
-                el: '#app',
-                data: {
-                    message: '1. If you see this then Vue works.'
+        <div class="card">
+            <?php
+                if ($error != "") {
+                echo "<p class='status-msg-error'>".$error."</p>";
                 }
-            });
-        </script>
+                else if ($success != "") {
+                echo "<p class='status-msg-success'>".$success."</p>";
+                }
+                $result = db_get_user_information();
+                if ($result->num_rows == 0) {
+                echo "<h4>Informacija nerasta.</h4>";
+                die();
+                }
+                $row = mysqli_fetch_assoc($result);
+            ?>
+            <form action="" method="post">
+                 <div>
+                    <label>Dabartinis slaptažodis</label><br>
+                    <input class="s1" name="currentpasw" type="password"><br>
+                    <label>Naujas slaptažodis</label><br>
+                    <input class="s1" name="newpasw" type="password"><br>
+                    <?php echo $_SESSION['pass_error'];?><br>
+                    <button type="submit" value="Keist" name="Keisti">Keisti slaptažodį</button>
+                 </div>
+            </form>
+            <button class="button" onclick="location.href = 'PaskyrosInformacijosPerziura.php';">Atgal</button>
+        </div>
     </body>
+    <script src="../../components/navigation.js"> </script>
+    <script>
+       const app = new Vue({
+         el: '#app'}
+                    );
+       </script>
 </html>

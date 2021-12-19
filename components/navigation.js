@@ -8,17 +8,19 @@ Vue.component("navigation", {
             <hr>
             <nav class='main-nav'>
                 <ul>
-                    <li><a href='/isp'>Pagrindinis langas</a></li>
-                    <li v-if="usertype !== ''">Atsijungti</li>
+                    <li v-if="usertype !== ''"><a href='/isp/pages/naudotojoDaliesValdymas/Atsijungti.php'>Atsijungti</li>
                     <li v-if="usertype !== ''">
                         <b>Paskyros tipas: {{usertype}}</b> <br>
-                        <i>nustatyta phpUtils/renderHead.php faile</i>
                     </li>
                 </ul>
-                <ul>
+                <ul v-if="usertype === ''">
+                    <li><a href='/isp/pages/naudotojoDaliesValdymas/prisijungimas.php'>Prisijungimas</a></li>
+                </ul>  
+                <ul v-if="usertype === ''">
+                    <li><a href='/isp/pages/naudotojoDaliesValdymas/registracija.php'>Registracija</a></li>
+                </ul>         
+                <ul v-if="usertype !== ''">
                     <li>Naudotojo Dalies Valdymas:</li>
-                    <li v-if="usertype === ''"><a href='/isp/pages/naudotojoDaliesValdymas/prisijungimas.php'>Prisijungimas</a></li>
-                    <li v-if="usertype === ''"><a href='/isp/pages/naudotojoDaliesValdymas/registracija.php'>Registracija</a></li>
                     <li v-if="usertype !== ''"><a href='/isp/pages/naudotojoDaliesValdymas/paskyrosInformacijosPerziura.php'>Paskyros Informacijos Peržiura</a></li>
                 </ul>
 

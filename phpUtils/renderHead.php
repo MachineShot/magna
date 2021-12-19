@@ -2,7 +2,7 @@
     # login (set session variables)
     include 'startSession.php';
     $usertype = isset($_SESSION["usertype"]) ? $_SESSION["usertype"] : "";
-    $usertype = "uzsakovas";
+    $usertype = "";
     #$usertype = "tiekejas";
     #$usertype = "vadovas";
 

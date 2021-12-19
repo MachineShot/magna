@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <?php include './phpUtils/renderHead.php'; ?>
+<?php
+    include './phpUtils/settings.php';
+    include './phpUtils/startSession.php';
+    if (!isset($_SESSION['username_login']))
+    {
+        inisession("full");
+    }
+    $_SESSION['prev'] = "index";
+?>
     <body>
         <div id="app">
-            <navigation usertype="<?php echo $usertype;?>"></navigation>
+            <navigation usertype="<?php echo $_SESSION['ulevel'];?>"></navigation>
+            <?php echo $_SESSION['message'];?>
 
-            {{ message }}
             <br>
-            <?php echo "2. If you see this then PHP works." ?>
-
-            <h1>Pagrindinis langas.</h1>
         </div>
+
 
         <script src="./components/navigation.js"></script>
         <script>
             const app = new Vue({
                 el: '#app',
-                data: {
-                    message: '1. If you see this then Vue works.'
-                }
             });
         </script>
     </body>

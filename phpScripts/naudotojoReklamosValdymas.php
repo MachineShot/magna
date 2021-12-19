@@ -21,7 +21,7 @@
 
     # Peržiūrėti viena reklama
         function db_get_ad($id) {
-            $sql = "SELECT *, `tiekejas`.`fk_naudotojo_slapyvardis` as `tiekejas`
+            $sql = "SELECT `reklama`.*, `tiekejas`.`fk_naudotojo_slapyvardis` as `tiekejas`
                     FROM `reklama`
                     LEFT JOIN `tiekejas`
                         ON `reklama`.`fk_tiekejo_id` = `tiekejas`.`id`
@@ -75,7 +75,7 @@
 
     # "Kurti užsakymą"
     function db_add_order($start_date, $end_date, $id) {
-        global $user; 
+        global $user;
 
         # Get info about advert
         $data = db_get_ad($id);

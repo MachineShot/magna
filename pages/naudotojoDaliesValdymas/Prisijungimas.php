@@ -3,20 +3,14 @@
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
     include '../../phpUtils/startSession.php';
-    if(isset($_POST['Prisijungimas']))
-    {
-       proclogin();
-    }
+    if(isset($_POST['Prisijungimas'])) {proclogin();}
     if ($_SESSION['username_login']!="" || ($_SESSION['prev'] != "index" && $_SESSION['prev'] != "registracija"
      && $_SESSION['prev'] != "proclogin"))
     {
       header("Location:../../index.php");
       exit();
     }
-    if($_SESSION['prev'] != "proclogin")
-    {
-      inisession("part");
-    }
+    if($_SESSION['prev'] != "proclogin"){inisession("part");}
     $_SESSION['prev'] = "prisijungimas";
 ?>
     <link rel="stylesheet" href="../../styles/InputForm.css" />

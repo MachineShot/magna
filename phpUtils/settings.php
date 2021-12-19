@@ -5,13 +5,10 @@ define("DB_PASS", "");
 define("DB_NAME", "isp");
 define("TBL_USERS", "naudotojas");
 define("DEFAULT_LEVEL","");
-define("ADMIN_LEVEL","Vadovas");
-define("CLIENT_LEVEL","Uzsakovas");
-define("WORKER_LEVEL","Tiekejas"); // kas turi vartotojų valdymo teisę
-define("UZBLOKUOTAS","255");      // vartotojas negali prisijungti kol administratorius nepakeis rolės
-$uregister="both";  // kaip registruojami vartotojai
-// self - pats registruojasi, admin - tik ADMIN_LEVEL, both - abu atvejai
-// * Email Constants -
+define("ADMIN_LEVEL","vadovas");
+define("CLIENT_LEVEL","uzsakovas");
+define("WORKER_LEVEL","tiekejas");
+define("UZBLOKUOTAS","255");
 define("EMAIL_FROM_NAME", "Demo");
 define("EMAIL_FROM_ADDR", "demo@ktu.lt");
 define("EMAIL_WELCOME", false);
@@ -33,6 +30,12 @@ function inisession($arg) {   //valom sesijos kintamuosius
         $_SESSION['surname_error']="";
         $_SESSION['number_error']="";
         $_SESSION['birthdate_error']="";
+        $_SESSION['agencyname_error']="";
+        $_SESSION['agencyadress_error']="";
+        $_SESSION['agencydescription_error']="";
+        $_SESSION['agencycode_error']="";
+        $_SESSION['agencycity_error']="";
+        $_SESSION['agencymailcode_error']="";
         }
 
 echo

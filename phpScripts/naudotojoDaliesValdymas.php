@@ -2,17 +2,16 @@
 include '../../phpUtils/connectToDB.php';
 include '../../phpUtils/settings.php';
 
-function procregister()
-{
+function procregister(){
     if (!isset($_SESSION['prev']) || $_SESSION['prev'] != "registracija") {
         header("Location: logout.php");
         exit();
     }
     $_SESSION['prev'] = "procregister";
     $_SESSION['message'] = "Registracija nesėkminga";
-
     $username = strtolower($_POST['username']);
     $pass = $_POST['pass'];
+    $type = $_POST['type'];
     $_SESSION['pass_login'] = $pass;
     $mail = $_POST['email'];
     $_SESSION['mail_login'] = $mail;
@@ -21,27 +20,46 @@ function procregister()
     $number = $_POST['number'];
     $birthdate = $_POST['birthdate'];
 
-    list($dbuname) = checkdb($username); //patikrinam DB
+    list($dbuname) = checkdb($username);
     if ($dbuname) {
         $_SESSION['username_error'] = "<font size=\"2\" color=\"#ff0000\">* Tokiu vardu jau yra registruotas vartotojas</font>";
     } else {
-
         if (checkpass($pass, substr(hash('sha256', $pass), 5, 32)) & checkusername($username)
-        &checkmail($mail)&checkname($name)&checksurname($surname)&checknumber($number)) {
-            // antra tikrinimo dalis checkpass bus true
-            $pass = substr(hash('sha256', $pass), 5, 32); // DB password skirti 32 baitai, paimam is maisos vidurio
-            //if (!isset($_SESSION['ulevel']) && $_SESSION['ulevel'] == $user_roles[ADMIN_LEVEL]) $ulevel = $user_roles[WORKER_LEVEL]; // jei registravo adminas, imam jo nurodyta role
-            //else $ulevel = $user_roles[DEFAULT_LEVEL];
-            $ulevel = CLIENT_LEVEL;
-            $sql =
-                "INSERT INTO " .
-                TBL_USERS .
-                " (slapyvardis, email, vardas, pavarde, tel_nr, slaptazodis, gimimo_data, tipas)
-    				VALUES(
-    					'$username', '$mail', '$name', '$surname', '$number', '$pass', '$birthdate','$ulevel')
-    				";
+            &checkmail($mail)&checkname($name)&checksurname($surname)&checknumber($number)) {
+            $pass = substr(hash('sha256', $pass), 5, 32);
+            $ulevel = $type;
+            $sql ="INSERT INTO " . TBL_USERS . " (slapyvardis, email, vardas, pavarde, tel_nr, slaptazodis, gimimo_data, tipas)
+                            	VALUES('$username', '$mail', '$name', '$surname', '$number', '$pass', '$birthdate','$ulevel')";
+            if($ulevel == CLIENT_LEVEL || $ulevel == WORKER_LEVEL)
+            {
+               $inserted = db_send_query($sql);
+            }
+            if($ulevel == ADMIN_LEVEL)
+            {
+              $agencyname = $_POST['agencyname'];
+              $agencyadress = $_POST['agencyadress'];
+              $agencydescription = $_POST['agencydescription'];
+              $agencycode = $_POST['agencycode'];
+              $agencycity = $_POST['agencycity'];
+              $agencymailcode = $_POST['agencymailcode'];
+              $date = date('Y-m-d');
+              if (checkagencyinput($agencyname, "agencyname_error")&checkagencyinput($agencyadress, "agencyadress_error")
+              &checkagencyinput($agencydescription, "agencydescription_error")&checkagencyinput($agencycode, "agencycode_error")
+              &checkagencyinput($agencycity, "agencycity_error")&checkagencyinput($agencymailcode, "agencymailcode_error"))
+                  {
+                    $inserted = db_send_query($sql);
+                    if($inserted)
+                    {
+                      $sql2 ="INSERT INTO  `agentura` (id, pavadinimas, sukurimo_data, adresas, aprasymas, imones_kodas, miestas, pasto_kodas, fk_vadovo_slapyvardis)
+                                                              VALUES(default, '$agencyname', '$date', '$agencyadress', '$agencydescription', '$agencycode', '$agencycity', '$agencymailcode','$username')";
+                      $inserted2 = db_send_query($sql2);
+                    }
 
-            if (db_send_query($sql)) {
+
+                  }
+
+            }
+            if ($inserted||$inserted2) {
                 $_SESSION['message'] = "Registracija sėkminga";
                       header("Location:../../index.php");
                       exit();
@@ -54,8 +72,7 @@ function procregister()
     exit();
 }
 
-function proclogin()
-{
+function proclogin(){
     if (!isset($_SESSION['prev']) || $_SESSION['prev'] != "prisijungimas") {
         header("Location: logout.php");
         exit();
@@ -71,7 +88,7 @@ function proclogin()
         $_SESSION['message'] = "Pabandykite dar kartą";
     }
     if (checkusername($user)) {
-        list($dbuname, $dbupass, $dbulevel, $dbumai) = checkdb($user); //patikrinam ir jei randam, nuskaitom DB
+        list($dbuname, $dbupass, $dbulevel, $dbumai) = checkdb($user);
         if ($dbuname) {
             $pass = $_POST['pass'];
             if (checkpass($pass, $dbupass)) {
@@ -88,50 +105,40 @@ function proclogin()
 }
 
 
-function db_get_user_information()
-{
+function db_get_user_information(){
     $username = $_SESSION['username_login'];
     $sql = "SELECT  *
-                FROM `naudotojas`
-                WHERE `slapyvardis` = '$username'";
+            FROM `naudotojas`
+            WHERE `slapyvardis` = '$username'";
     return db_send_query($sql);
 }
 
-function updateInformation()
-{
+function updateInformation(){
     $username = $_SESSION['username_login'];
     $mail = $_POST['email'];
     $number = $_POST['number'];
     $_SESSION['mail_login'] = $mail;
-     if (checkmail($mail)&checknumber($number))
-    {
-      $sql = "UPDATE `naudotojas`
-                SET `email` = '$mail', `tel_nr` = '$number'
-                WHERE `slapyvardis` = '$username'";
-                if (db_send_query($sql))
-                {
-
-
-                                      header("Location: PaskyrosInformacijosPerziura.php");
-                                      exit();
-                            }
-   }
+     if (checkmail($mail)&checknumber($number)){
+          $sql = "UPDATE `naudotojas`
+                  SET `email` = '$mail', `tel_nr` = '$number'
+                  WHERE `slapyvardis` = '$username'";
+          if (db_send_query($sql)){
+              header("Location: PaskyrosInformacijosPerziura.php");
+               exit();
+          }
+     }
    header("Location: PaskyrosInformacijosKeitimas.php");
    exit();
 }
 
-function deleteAccount()
-{
+function deleteAccount(){
     $username = $_SESSION['username_login'];
-      $sql = "DELETE FROM `naudotojas`
-                WHERE `slapyvardis` = '$username'";
-                if (db_send_query($sql))
-                {
-
-
-                                      header("Location: Atsijungti.php");
-                                      exit();
-                }
+    $sql = "DELETE FROM `naudotojas`
+            WHERE `slapyvardis` = '$username'";
+            if (db_send_query($sql)){
+                header("Location: Atsijungti.php");
+                exit();
+            }
    header("Location: PaskyrosTrynimas.php");
    exit();
 }
@@ -142,39 +149,29 @@ function updatePassword()
     $currentpasw = $_POST['currentpasw'];
     $newpasw = $_POST['newpasw'];
     list($dbuname, $dbupass, $dbulevel, $dbumai) = checkdb($username);
-    if ($dbuname)
-    {
-                if (checkpass($currentpasw, $dbupass))
-                {
-                    $pass = substr(hash('sha256', $newpasw), 5, 32);
-                    $_SESSION['pass_login'] = $pass;
-                     $sql = "UPDATE `naudotojas`
-                                    SET `slaptazodis` = '$pass'
-                                    WHERE `slapyvardis` = '$username'";
-                       if (db_send_query($sql))
-                                       {
-
-
-                                            header("Location: PaskyrosInformacijosPerziura.php");
-
-                                            exit();
-                                       }
-                }
+    if ($dbuname){
+       if (checkpass($currentpasw, $dbupass)){
+          $pass = substr(hash('sha256', $newpasw), 5, 32);
+          $_SESSION['pass_login'] = $pass;
+          $sql = "UPDATE `naudotojas`
+                  SET `slaptazodis` = '$pass'
+                  WHERE `slapyvardis` = '$username'";
+          if (db_send_query($sql)){
+              header("Location: PaskyrosInformacijosPerziura.php");
+              exit();
+          }
+       }
     }
-      header("Location: PaskyrosSlaptazodzioKeitimas.php");
-      exit();
+    header("Location: PaskyrosSlaptazodzioKeitimas.php");
+    exit();
 }
 
 
-function checkusername($username)
-{
-    // Vartotojo vardo sintakse
+function checkusername($username){
     if (!$username || strlen($username = trim($username)) == 0) {
-        $_SESSION['username_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvestas vartotojo vardas</font>";
-        "";
+        $_SESSION['username_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!preg_match("/^([0-9a-zA-Z])*$/", $username)) {
-        /* Check if username is not alphanumeric */
         $_SESSION['username_error'] = "<font size=\"2\" color=\"#ff0000\">* Vartotojo vardas gali būti sudarytas<br>
     				&nbsp;&nbsp;tik iš raidžių ir skaičių</font>";
         return false;
@@ -183,15 +180,11 @@ function checkusername($username)
     }
 }
 
-function checknumber($username)
-{
-    // Vartotojo vardo sintakse
+function checknumber($username){
     if (!$username || strlen($username = trim($username)) == 0) {
-        $_SESSION['number_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvestas telefono numeirs</font>";
-        "";
+        $_SESSION['number_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!preg_match("/^^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\.\/0-9]*$/", $username)) {
-        /* Check if username is not alphanumeric */
         $_SESSION['number_error'] = "<font size=\"2\" color=\"#ff0000\">* Neteisingas formatas</font>";
         return false;
     } else {
@@ -199,14 +192,11 @@ function checknumber($username)
     }
 }
 
-function checkname($input)
-{
+function checkname($input){
     if (!$input || strlen($input = trim($input)) == 0) {
-        $_SESSION['name_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvestas vartotojo vardas</font>";
-        "";
+        $_SESSION['name_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!preg_match("/^([a-zA-Z])*$/", $input)) {
-        /* Check if username is not alphanumeric */
         $_SESSION['name_error'] = "<font size=\"2\" color=\"#ff0000\">* Vartotojo vardas gali būti sudarytas<br>
     				&nbsp;&nbsp;tik iš raidžių</font>";
         return false;
@@ -215,14 +205,25 @@ function checkname($input)
     }
 }
 
-function checksurname($input)
-{
+function checkagencyinput($input, $sessionerror){
     if (!$input || strlen($input = trim($input)) == 0) {
-        $_SESSION['surname_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvesta vartotojo pavardė</font>";
-        "";
+        $_SESSION[$sessionerror] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
+        return false;
+    } elseif ($sessionerror=="agencycity_error" && !preg_match("/^([a-zA-Z])*$/", $input)){
+          $_SESSION[$sessionerror] = "<font size=\"2\" color=\"#ff0000\">* Miestas gali būti sudarytas<br>
+              				&nbsp;&nbsp;tik iš raidžių</font>";
+    }
+    else {
+        return true;
+    }
+}
+
+
+function checksurname($input){
+    if (!$input || strlen($input = trim($input)) == 0) {
+        $_SESSION['surname_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!preg_match("/^([a-zA-Z])*$/", $input)) {
-        /* Check if username is not alphanumeric */
         $_SESSION['surname_error'] = "<font size=\"2\" color=\"#ff0000\">* Vartotojo pavardė gali būti sudaryta<br>
     				&nbsp;&nbsp;tik iš raidžių</font>";
         return false;
@@ -231,18 +232,15 @@ function checksurname($input)
     }
 }
 
-function checkpass($pwd, $dbpwd)
-{
-    //  slaptazodzio tikrinimas (tik demo: min 4 raides ir/ar skaiciai) ir ar sutampa su DB esanciu
+function checkpass($pwd, $dbpwd){
     if (!$pwd || strlen($pwd = trim($pwd)) == 0) {
-        $_SESSION['pass_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvestas slaptažodis</font>";
+        $_SESSION['pass_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!preg_match("/^([0-9a-zA-Z])*$/", $pwd)) {
         /* Check if $pass is not alphanumeric */
         $_SESSION['pass_error'] = "* Čia slaptažodis gali būti sudarytas<br>&nbsp;&nbsp;tik iš raidžių ir skaičių";
         return false;
     } elseif (strlen($pwd) < 4) {
-        // per trumpas
         $_SESSION['pass_error'] = "<font size=\"2\" color=\"#ff0000\">* Slaptažodžio ilgis <4 simbolius</font>";
         return false;
     } elseif ($dbpwd != substr(hash('sha256', $pwd), 5, 32)) {
@@ -253,18 +251,12 @@ function checkpass($pwd, $dbpwd)
     }
 }
 
-function checkdb($username)
-{
-    // iesko DB pagal varda, grazina {vardas,slaptazodis,lygis,id} ir nustato name_error
+function checkdb($username){
     $sql = "SELECT * FROM " . TBL_USERS . " WHERE slapyvardis = '$username'";
     $result = db_send_query($sql);
     $uname = $upass = $ulevel = $uid = $umail = $id = null;
     if (!$result || mysqli_num_rows($result) != 1) {
-        // jei >1 tai DB vardas kartojasi, netikrinu, imu pirma
-        // neradom vartotojo DB
-        $_SESSION['name_error'] = "<font size=\"2\" color=\"#ff0000\">* Tokio vartotojo nėra</font>";
     } else {
-        //vardas yra DB
         $row = mysqli_fetch_assoc($result);
         $uname = $row["slapyvardis"];
         $upass = $row["slaptazodis"];
@@ -274,11 +266,9 @@ function checkdb($username)
     return [$uname, $upass, $ulevel, $umail];
 }
 
-function checkmail($mail)
-{
-    // e-mail sintax error checking
+function checkmail($mail){
     if (!$mail || strlen($mail = trim($mail)) == 0) {
-        $_SESSION['mail_error'] = "<font size=\"2\" color=\"#ff0000\">* Neįvestas e-pašto adresas</font>";
+        $_SESSION['mail_error'] = "<font size=\"2\" color=\"#ff0000\">* Užpildykite šį įvedimo lauką!</font>";
         return false;
     } elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['mail_error'] = "<font size=\"2\" color=\"#ff0000\">* Neteisingas e-pašto adreso formatas</font>";
@@ -287,7 +277,4 @@ function checkmail($mail)
         return true;
     }
 }
-
-
-
 ?>

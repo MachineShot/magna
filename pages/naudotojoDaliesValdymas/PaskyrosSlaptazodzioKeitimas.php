@@ -2,18 +2,14 @@
 <html>
 <?php
     include '../../phpScripts/naudotojoDaliesValdymas.php';
-    $error = "";
-    $success = "";
     include '../../phpUtils/startSession.php';
     if ($_SESSION['username_login']=="")
     {
        header("Location:../../index.php");
        exit();
     }
-    if(isset($_POST['Keisti']))
-    {
-       updatePassword();
-    }
+    if(isset($_POST['Keisti'])){updatePassword();}
+    $_SESSION['prev'] = "PaskyrosSlaptazodzioKeitimas";
 ?>
     <link rel="stylesheet" href="../../styles/InputForm.css" />
     <body>
@@ -24,15 +20,8 @@
         </div>
         <div class="card">
             <?php
-                if ($error != "") {
-                echo "<p class='status-msg-error'>".$error."</p>";
-                }
-                else if ($success != "") {
-                echo "<p class='status-msg-success'>".$success."</p>";
-                }
                 $result = db_get_user_information();
                 if ($result->num_rows == 0) {
-                echo "<h4>Informacija nerasta.</h4>";
                 die();
                 }
                 $row = mysqli_fetch_assoc($result);

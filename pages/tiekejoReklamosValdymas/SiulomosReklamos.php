@@ -38,11 +38,11 @@ $success = "";
     $result = db_get_all_provided_ads();
     if ($result->num_rows == 0) {
         echo "<h4>Nėra nei vienos reklamos.</h4>";
-        die();
+        $invisible = 1;
     }
     ?>
 
-    <table id='data-table'>
+    <table id='data-table' style="<?php if ($invisible == 1) echo 'display:none'?>">
         <tr>
             <th>ID</th>
             <th>Kaina</th>

@@ -1,12 +1,13 @@
 <?php
     include '../../phpUtils/connectToDB.php';
+    include '../../phpUtils/settings.php';
 
-    $user = "tOMAS"; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
+    $user = $_SESSION['username_login']; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
     # Peržiūrėti tiekejo užsakytas reklamas(veikia kaip reikia)
     function db_get_all_ordered_ads() {
         global $user;  # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
-
+        //echo var_dump($user);
         $tiekejoID = mysqli_fetch_assoc(db_send_query("SELECT id FROM tiekejas WHERE fk_naudotojo_slapyvardis='$user'"));
         $sql = "SELECT `uzsakymas`.`nr`, `uzsakymas`.`kaina`, `uzsakymas`.`sudarymo_data`, `uzsakymas`.`pabaigos_data`,
 		            `uzsakymas`.`busena`, `uzsakymas`.`fk_uzsakovo_slapyvardis`

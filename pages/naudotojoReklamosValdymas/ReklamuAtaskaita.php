@@ -121,9 +121,11 @@
                 </div>
 
                 <article>
+                    <h4>Filtrus atitinkančių duomenų bendros statistikos:</h4>
+                    <h5>Statistikos pagal tiekėjus</h5>
                     <table>
                         <tr>
-                            <th>Darbuotojo slapyvardis</th>
+                            <th>Tiekėjo slapyvardis</th>
                             <th>Užsakymų kiekis</th>
                             <th>Užsakymų kainos suma</th>
                         </tr>
@@ -140,7 +142,7 @@
                     </table>
                 </article>
                 <article>
-                    <h4>Filtrus atitinkančių duomenų bendros statistikos:</h4>
+                    <h5>Statistikos pagal agentūras</h5>
                     <table>
                         <tr>
                             <th>Agentūros pavadinimas</th>

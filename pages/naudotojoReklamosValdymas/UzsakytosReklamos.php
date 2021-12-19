@@ -10,7 +10,7 @@
     </head>
     <body>
         <div id="app">
-            <navigation usertype="<?php echo $usertype;?>"></navigation>
+            <navigation usertype="<?php echo $_SESSION['ulevel'];?>"> </navigation>
 
                         <h1>Užsakytų reklamų sąrašas</h1>
 

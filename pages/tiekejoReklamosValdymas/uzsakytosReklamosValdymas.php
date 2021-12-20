@@ -11,7 +11,6 @@
         $error = "";
         $success = "";
 
-        echo var_dump($_POST);
 
         if ($_POST != null) {
             $busena = $_POST['busena'];

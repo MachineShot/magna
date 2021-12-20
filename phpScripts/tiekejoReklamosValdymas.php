@@ -75,7 +75,6 @@
         $sql = "UPDATE `uzsakymas`
                 SET `busena` = '$busena'
                 WHERE `nr` = '$id'";
-        echo $sql;
         db_send_query($sql);
     }
 
@@ -213,7 +212,7 @@
         $count_orders = "SELECT COUNT(`reklama`.id) as 'count' FROM `reklama`
                 WHERE `reklama`.`fk_tiekejo_id` = '$tiekejoID[id]' {$whereClauseString} AND `reklama`.`id` IN 
                       (SELECT `uzsakymas`.`fk_reklama_id` FROM `uzsakymas`)";
-        echo $count_orders;
+        //echo $count_orders;
         /*
         $vendor_info = db_filtering($date_start, $date_end, $price_start, $price_end,
             "SELECT `tiekejas`.`fk_naudotojo_slapyvardis`, COUNT(`reklama`.`fk_tiekejo_id`) as 'count', SUM(`uzsakymas`.`kaina`) as 'sum'",

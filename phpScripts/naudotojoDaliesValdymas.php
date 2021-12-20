@@ -83,7 +83,7 @@ function proclogin(){
 
 
     if (checkusername($user)) {
-        list($dbuname, $dbupass, $dbulevel, $dbumai) = checkdb($user);
+        list($dbuname, $dbupass, $dbulevel, $dbumai, $uagencyid) = checkdb($user);
         $_SESSION['message'] = "Tokio naudotojo nėra";
         if ($dbuname) {
             $pass = $_POST['pass'];
@@ -93,6 +93,7 @@ function proclogin(){
                 $_SESSION['umail'] = $dbumai;
                 $_SESSION['pass_login'] = $pass;
                 $_SESSION['ulevel'] = $dbulevel;
+                $_SESSION['uagencyid'] = $uagencyid;
                 $_SESSION['message'] = "";
                 header("Location:../../index.php");
                 exit();
@@ -259,7 +260,7 @@ function checkpass($pwd, $dbpwd){
 function checkdb($username){
     $sql = "SELECT * FROM " . TBL_USERS . " WHERE slapyvardis = '$username'";
     $result = db_send_query($sql);
-    $uname = $upass = $ulevel = $uid = $umail = $id = null;
+    $uname = $upass = $ulevel = $uid = $umail = $id = $uagencyid = null;
     if (!$result || mysqli_num_rows($result) != 1) {
     } else {
         $row = mysqli_fetch_assoc($result);
@@ -268,7 +269,12 @@ function checkdb($username){
         $ulevel = $row["tipas"];
         $umail = $row["email"];
     }
-    return [$uname, $upass, $ulevel, $umail];
+
+    $sql = "SELECT id FROM agentura WHERE fk_vadovo_slapyvardis = '$username'";
+    $result = db_send_query($sql);
+    $row = mysqli_fetch_assoc($result);
+    $uagencyid = $row["id"];
+    return [$uname, $upass, $ulevel, $umail, $uagencyid];
 }
 
 function checkmail($mail){

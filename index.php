@@ -13,6 +13,7 @@
     <body>
         <div id="app">
             <navigation usertype="<?php echo $_SESSION['ulevel'];?>"></navigation>
+            <?php echo $_SESSION['message'];?>
 
             <br>
         </div>

@@ -138,6 +138,28 @@
         }
     }
 
+    function db_get_filtered_provider_ads($date_start, $date_end) {
+        include '../../phpUtils/startSession.php';
+        global $user;
+
+        $sql = "SELECT
+                    `tiekejas`.`fk_naudotojo_slapyvardis` as 'slapyvardis',
+                    `uzsakymas`.`busena` as 'uzsakymo_busena'
+                FROM `idarbina`
+                INNER JOIN `tiekejas`
+                    ON `tiekejas`.`id` = `fk_tiekejas_id`
+                LEFT JOIN `reklama`
+                    ON `tiekejas`.`id` = `reklama`.`fk_tiekejo_id`
+                LEFT JOIN `uzsakymas`
+                    ON `uzsakymas`.`fk_reklama_id` = `reklama`.`id`
+                WHERE 
+                    `fk_agentura_id` = '$agenturos_id' AND
+                    `uzsakymas`.`sudarymo_data` >= '$date_start' AND
+                    `uzsakymas`.`sudarymo_data` <= '$date_end'";
+        return db_send_query($sql);
+    }
+
+
     function db_filtering($date_start, $date_end, $price_start, $price_end, $func, $group_by) {
         global $user; # TEMPORARY - DELETE WHEN AUTHENTICATION IS IMPLEMENTED
 
@@ -223,15 +245,16 @@
         $count_not_ordered_ads = $count_orders = db_filtering($date_start, $date_end, $price_start, $price_end, "SELECT COUNT(`reklama`.id) as 'count2' FROM `reklama`
                 WHERE `reklama`.`fk_tiekejo_id` = '$tiekejoID[id]' AND `reklama`.`id` NOT IN 
                       (SELECT `uzsakymas`.`fk_reklama_id` FROM `uzsakymas`)", "");
-
-        $results = array(
-            "orders_money_sum" => $orders_money_sum,
-            "count_orders" => $count_orders,
-            "vendor_info" => $vendor_info,
-            "agency_info" => $agency_info,
-            "not_ordered_ads" => $count_not_ordered_ads
-        );
         */
+        $results = array(
+            ""
+            //"orders_money_sum" => $orders_money_sum,
+            //"count_orders" => $count_orders,
+            //"vendor_info" => $vendor_info,
+            //"agency_info" => $agency_info,
+            //"not_ordered_ads" => $count_not_ordered_ads
+        );
+
 
 
 

@@ -76,7 +76,7 @@ include '../../phpScripts/tiekejoReklamosValdymas.php';
 
     <section>
         <aside>
-            <p><b><?php echo $providerInfo[0]['vardas']?></b></p>
+            <p><b><?php echo $providerInfo['vardas']?> <?php echo $providerInfo['pavarde']?></b></p>
             <p><b>Ataskaitos sudarymo data ir laikas:</b> <?php echo $date_today ?></p>
 
             <h4>Ataskaitoje vaizduojami duomenys su žemiau pritaikytais filtrais:</h4>

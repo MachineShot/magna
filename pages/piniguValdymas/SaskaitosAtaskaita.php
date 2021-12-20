@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
-    <?php         include '../../phpUtils/renderHead.php';
-        if ($_SESSION['username_login']=="")
-        {
-            header("Location:../../index.php");
-            exit();
-        } ?>
+    <?php include '../../phpUtils/renderHead.php';
+    if ($_SESSION['username_login']=="")
+    {
+        header("Location:../../index.php");
+        exit();
+    }
+    
+    ?>
     </head>
     <body>
         <div id="app">
-            <navigation usertype="<?php echo $_SESSION['ulevel'];?>"> </navigation>
+            <navigation usertype="<?php echo $usertype;?>"></navigation>
 
             {{ message }}
             <br>
